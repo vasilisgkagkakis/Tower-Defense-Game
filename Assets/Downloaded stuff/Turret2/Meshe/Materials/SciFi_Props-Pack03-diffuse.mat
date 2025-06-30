@@ -54,7 +54,7 @@ Material:
     - _Parallax: 0.005
     - _Shininess: 0.07417431
     m_Colors:
-    - _Color: {r: 0.42647058, g: 0.42647058, b: 0.42647058, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ReflectColor: {r: 0.27205884, g: 0.27205884, b: 0.27205884, a: 0.5019608}
     - _SpecColor: {r: 0.18275861, g: 0.18275861, b: 0.18275861, a: 1}
   m_BuildTextureStacks: []

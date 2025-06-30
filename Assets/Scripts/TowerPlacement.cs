@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -48,9 +49,21 @@ public class TowerPlacement : MonoBehaviour
                     if (!hit.collider.gameObject.CompareTag("PlaceNotAllowed"))
                     {
                         if (canPlace)
-                        {
+                        {   TowerBehaviour towerBehaviour = CurrentPlacingTower.GetComponent<TowerBehaviour>();
                             TowerCollider.isTrigger = false;
+                            Debug.Log("Before Placed tower: " + currentTowerName);
                             SetPreviewTint(Color.white); // Reset tint to default when placed
+                            TowerDescriptionUI.Instance.Show(towerBehaviour);
+
+                            Debug.Log("After Placed tower: " + currentTowerName);
+
+                            if (CurrentPlacingTower != null)
+                            {
+                                Debug.Log("MPIKE");
+                                Color highlight = new Color(1f, 1f, 0.5f, 0.3f); // very light yellow
+                                CurrentPlacingTower.gameObject.GetComponentInParent<TowerBehaviour>().SetHighlight();
+                            }
+
                             CurrentPlacingTower = null;
                         }
                         else
@@ -58,7 +71,7 @@ public class TowerPlacement : MonoBehaviour
                             Collider[] hits = Physics.OverlapBox(BoxCenter, HalfExtents, Quaternion.identity, PlacementCheckMask, QueryTriggerInteraction.Ignore);
                             foreach (var col in hits)
                             {
-                                Debug.Log("Blocked by: " + col.gameObject.name + " on layer " + LayerMask.LayerToName(col.gameObject.layer));
+                                //Debug.Log("Blocked by: " + col.gameObject.name + " on layer " + LayerMask.LayerToName(col.gameObject.layer));
                             }
                         }
                     }
@@ -105,12 +118,7 @@ public class TowerPlacement : MonoBehaviour
         {
             var block = new MaterialPropertyBlock();
             rend.GetPropertyBlock(block);
-
-            // If resetting and turret_2, use #6D6D6D, else use tint
-            if (tint == Color.white && currentTowerName == "turret_2")
-                block.SetColor("_Color", new Color(0.427f, 0.427f, 0.427f, 0.3f)); // #6D6D6D in normalized color
-            else
-                block.SetColor("_Color", tint);
+            block.SetColor("_Color", tint);
 
             rend.SetPropertyBlock(block);
         }

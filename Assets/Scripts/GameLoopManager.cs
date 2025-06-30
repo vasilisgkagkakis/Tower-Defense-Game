@@ -12,7 +12,7 @@ public class GameLoopManager : MonoBehaviour
         EntitySummoner.Init();
 
         StartCoroutine(GameLoop());
-        InvokeRepeating("SummonTest", 0f, 1f);
+        InvokeRepeating("SummonTest", 0f, 100000f);
         // InvokeRepeating("RemoveTest", 0f, 2f);
     }
 
@@ -49,6 +49,6 @@ public class GameLoopManager : MonoBehaviour
     public static void EnqueueEnemyIDToSummon(int ID)
     {
         EnemyIDsToSummon.Enqueue(ID);
-        Debug.Log("Enqueued enemy ID: " + ID);
+        //Debug.Log("Enqueued enemy ID: " + ID);
     }
 }

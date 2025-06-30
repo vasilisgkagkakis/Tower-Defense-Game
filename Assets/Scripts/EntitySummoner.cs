@@ -28,7 +28,7 @@ public class EntitySummoner : MonoBehaviour
             EnemiesInGame = new List<Enemy>();
 
             EnemySummonData[] Enemies = Resources.LoadAll<EnemySummonData>("Enemies");
-            Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
+            //Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
 
             foreach (EnemySummonData enemyData in Enemies)
             {
@@ -40,7 +40,7 @@ public class EntitySummoner : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("EntitySummoner is already initialized.");
+            //Debug.LogWarning("EntitySummoner is already initialized.");
         }
     }
 
@@ -59,14 +59,14 @@ public class EntitySummoner : MonoBehaviour
                 SummonedEnemy.Init();
 
                 SummonedEnemy.gameObject.SetActive(true);
-                Debug.Log("Reusing enemy from pool with ID: " + EnemyID);
+                //Debug.Log("Reusing enemy from pool with ID: " + EnemyID);
             }
             else
             {
                 GameObject enemyPrefab = Instantiate(EnemyPrefabs[EnemyID], spawnPoint.position, Quaternion.identity);
                 SummonedEnemy = enemyPrefab.GetComponent<Enemy>();
                 SummonedEnemy.Init();
-                Debug.Log("Instantiated new enemy with ID: " + EnemyID);
+                //Debug.Log("Instantiated new enemy with ID: " + EnemyID);
             }
 
             SummonedEnemy.ID = EnemyID;
@@ -75,7 +75,7 @@ public class EntitySummoner : MonoBehaviour
         }
         else
         {
-            Debug.Log("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
+            //("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
             return null;
         }
 

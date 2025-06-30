@@ -150,6 +150,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bf0553e09b646488d50516a6d5fdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerData: {fileID: 11400000, guid: 6910ae7568d9ee34cb88922f8e282b40, type: 2}
+  targetType: 0
+  targetingDropdown: {fileID: 0}
+  upgradePrefabs:
+  - {fileID: 1456146107625005990}
+  - {fileID: 938563666744537355, guid: 2e8f05995ceb63c48b5ff48cc6d0da0e, type: 3}
+  upgradeLevel: 0
+  upgradeDamages:
+  - 70
+  - 100
+  currentDamage: 0
+  resetColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!65 &5273107298317843381
 BoxCollider:
   m_ObjectHideFlags: 0
