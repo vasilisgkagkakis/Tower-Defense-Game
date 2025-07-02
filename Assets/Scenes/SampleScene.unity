@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: f22823ef583a9f54dab6ef52988fcb83, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -2497,7 +2497,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.1
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 593709ae406c9714ead8538ba3946bfd, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: a89ee839f3c9c8e4aac829d348667f6b, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &933892588
 GameObject:
@@ -4647,7 +4647,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5f59838b0a2264190b991938466ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPointInstance: {fileID: 4283605570687459821, guid: ec70c80f49b4f9e41ade1296ce1018da, type: 3}
+  spawnPointInstance: {fileID: 1424187794302711117, guid: ec70c80f49b4f9e41ade1296ce1018da, type: 3}
 --- !u!4 &1667895127
 Transform:
   m_ObjectHideFlags: 0

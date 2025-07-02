@@ -6,16 +6,16 @@ public class TowerBehaviour : MonoBehaviour
 {
     public TowerData towerData;
     public TowerTargeting.TargetType targetType = TowerTargeting.TargetType.First;
-    public Dropdown targetingDropdown; // Reference to the Dropdown UI element
+    public Dropdown targetingDropdown;
 
     // Upgrade system
-    public GameObject[] upgradePrefabs; // Assign your prefabs in order (level 1, 2, 3)
+    public GameObject[] upgradePrefabs;
     public int upgradeLevel = 0;
-    public float[] upgradeDamages; // e.g. [10, 20, 30]
-    private Color previousColor = Color.white;
-
-    public float currentDamage; // Instance-specific damage
+    public float[] upgradeDamages;
+    public float currentDamage;
     [SerializeField] private Color resetColor;
+
+    public bool isPlaced = false; // Set this to true when the tower is placed
 
     void Start()
     {
@@ -27,6 +27,12 @@ public class TowerBehaviour : MonoBehaviour
 
     public void UpgradeTower()
     {
+        if (!isPlaced)
+        {
+            Debug.Log("Cannot upgrade: Tower is not placed.");
+            return;
+        }
+
         if (upgradeLevel + 1 < upgradePrefabs.Length)
         {
             upgradeLevel++; // Increment first!
@@ -34,6 +40,7 @@ public class TowerBehaviour : MonoBehaviour
             // Instantiate the next prefab at the same position/rotation
             GameObject newTower = Instantiate(upgradePrefabs[upgradeLevel], transform.position, transform.rotation);
             TowerBehaviour newBehaviour = newTower.GetComponent<TowerBehaviour>();
+            newBehaviour.isPlaced = true; // Mark the new tower as placed
             newBehaviour.SetHighlight();
 
             // Copy over targeting mode, etc.
@@ -49,6 +56,7 @@ public class TowerBehaviour : MonoBehaviour
 
             // Update the selected tower reference
             TowerSelector.selectedTower = newBehaviour; // <-- Add this line
+            TowerSelector.lastHighlightedTower = newBehaviour; // Add this line
 
             // Destroy the old tower
             Destroy(gameObject);
@@ -63,7 +71,6 @@ public class TowerBehaviour : MonoBehaviour
         {
             var block = new MaterialPropertyBlock();
             rend.GetPropertyBlock(block);
-            Debug.Log("Rend: " + rend.name + "Inside setHightlight - highlight: " + highlight);
             block.SetColor("_Color", highlight);
             rend.SetPropertyBlock(block);
         }
@@ -71,7 +78,6 @@ public class TowerBehaviour : MonoBehaviour
 
     public void ClearHighlight()
     {
-        Debug.Log("Inside ClearHighlight - resetColor: " + resetColor);
         var renderers = GetComponentsInChildren<Renderer>();
         foreach (var rend in renderers)
         {

@@ -192,6 +192,10 @@ MonoBehaviour:
   turnSpeed: 5
   detectionRange: 30
   yRotationOffset: -90
+  StartPoint: []
+  bulletPrefab: {fileID: 0}
+  bulletTrail: {fileID: 0}
+  fireInterval: 1
 --- !u!114 &9009583079814500374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +220,7 @@ MonoBehaviour:
   - 80
   currentDamage: 0
   resetColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  isPlaced: 0
 --- !u!65 &1497658467358991513
 BoxCollider:
   m_ObjectHideFlags: 0

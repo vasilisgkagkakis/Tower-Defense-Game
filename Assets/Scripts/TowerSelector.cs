@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 public class TowerSelector : MonoBehaviour
 {
     public static TowerBehaviour selectedTower;
-
-    private TowerBehaviour lastHighlightedTower;
+    public static TowerBehaviour lastHighlightedTower;
 
     void Update()
     {
@@ -39,7 +38,7 @@ public class TowerSelector : MonoBehaviour
                     return; // Prevent hiding UI if a tower was clicked
                 }
             }
-
+            Debug.Log(lastHighlightedTower.name);
             // Remove highlight if clicking elsewhere
             if (lastHighlightedTower != null)
             {

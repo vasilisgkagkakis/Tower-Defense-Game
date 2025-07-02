@@ -72,11 +72,9 @@ public class TowerDescriptionUI : MonoBehaviour
 
     public void OnUpgradeButton()
     {
-        //Debug.Log(currentTower);
         if (currentTower != null)
         {
             currentTower.UpgradeTower();
-            // Hide(); // Optionally hide the UI after upgrade
         }
     }
 }

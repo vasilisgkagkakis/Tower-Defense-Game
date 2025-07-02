@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -34,7 +33,6 @@ public class TowerPlacement : MonoBehaviour
                 float yOffset = (currentTowerName == "turret_2") ? 0.12f : 0f;
                 CurrentPlacingTower.transform.position = hit.point + new Vector3(0, yOffset, 0);
 
-                // --- Placement check and tint update happen every frame ---
                 BoxCollider TowerCollider = CurrentPlacingTower.GetComponent<BoxCollider>();
                 TowerCollider.isTrigger = true;
                 Vector3 BoxCenter = TowerCollider.bounds.center;
@@ -50,17 +48,13 @@ public class TowerPlacement : MonoBehaviour
                     {
                         if (canPlace)
                         {   TowerBehaviour towerBehaviour = CurrentPlacingTower.GetComponent<TowerBehaviour>();
+                            towerBehaviour.isPlaced = true; // <-- Mark as placed
                             TowerCollider.isTrigger = false;
-                            Debug.Log("Before Placed tower: " + currentTowerName);
-                            SetPreviewTint(Color.white); // Reset tint to default when placed
+                            SetPreviewTint(Color.white);
                             TowerDescriptionUI.Instance.Show(towerBehaviour);
-
-                            Debug.Log("After Placed tower: " + currentTowerName);
 
                             if (CurrentPlacingTower != null)
                             {
-                                Debug.Log("MPIKE");
-                                Color highlight = new Color(1f, 1f, 0.5f, 0.3f); // very light yellow
                                 CurrentPlacingTower.gameObject.GetComponentInParent<TowerBehaviour>().SetHighlight();
                             }
 
