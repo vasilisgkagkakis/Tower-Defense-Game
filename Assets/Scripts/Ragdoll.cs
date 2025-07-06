@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +17,8 @@ public class Ragdoll : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         DisableRagdoll();
+        //enable ragdoll after 3 seconds for testing purposes
+        StartCoroutine(EnableRagdollDelayed(transform.position, 3f));
     }
 
     //για καθε rigidbody που εχει, τα κανω kinematic ωστε να μην χρησιμοποιουν την βαρυτητα ακομα
@@ -51,5 +54,12 @@ public class Ragdoll : MonoBehaviour
         {
             SetAllChildLayers(childTransform, layerName);
         }
+    }
+
+    private IEnumerator EnableRagdollDelayed(Vector3 hitpoint, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        EnableRagdoll(hitpoint);
+        Destroy(gameObject, 3f); // Destroy the game object after 10 seconds to prevent memory leaks
     }
 }

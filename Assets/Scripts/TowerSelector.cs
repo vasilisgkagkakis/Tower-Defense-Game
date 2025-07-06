@@ -38,7 +38,7 @@ public class TowerSelector : MonoBehaviour
                     return; // Prevent hiding UI if a tower was clicked
                 }
             }
-            Debug.Log(lastHighlightedTower.name);
+            // Debug.Log(lastHighlightedTower.name);
             // Remove highlight if clicking elsewhere
             if (lastHighlightedTower != null)
             {
