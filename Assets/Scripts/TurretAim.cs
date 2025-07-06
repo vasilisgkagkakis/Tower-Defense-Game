@@ -5,7 +5,8 @@ public class TurretAim : MonoBehaviour
     public Transform turretMount;            // Rotating part of the turret
     public float turnSpeed = 5f;
     public float detectionRange = 30f;
-    public float yRotationOffset = 0f;       // Manual offset in degrees (e.g. -90 for X-facing turrets)
+    public float yRotationOffset = 0f;   
+    public float zRotationOffset = 0f;     
     private Transform target;
     private TowerBehaviour towerBehaviour;
 
@@ -33,7 +34,7 @@ public class TurretAim : MonoBehaviour
             if (direction.sqrMagnitude > 0.01f)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
-                Quaternion adjustedRotation = lookRotation * Quaternion.Euler(0, yRotationOffset, 0);
+                Quaternion adjustedRotation = lookRotation * Quaternion.Euler(0, yRotationOffset, zRotationOffset);
                 turretMount.rotation = Quaternion.Slerp(turretMount.rotation, adjustedRotation, Time.deltaTime * turnSpeed);
             }
 

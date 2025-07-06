@@ -18,7 +18,7 @@ public class Ragdoll : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         DisableRagdoll();
         //enable ragdoll after 3 seconds for testing purposes
-        StartCoroutine(EnableRagdollDelayed(transform.position, 3f));
+        // StartCoroutine(EnableRagdollDelayed(transform.position, 3f));
     }
 
     //για καθε rigidbody που εχει, τα κανω kinematic ωστε να μην χρησιμοποιουν την βαρυτητα ακομα
