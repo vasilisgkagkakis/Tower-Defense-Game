@@ -9,14 +9,24 @@ namespace HomingMissile
       public GameObject target;
       public Transform[] spawn_points;
       // button in the inspector to call this function
+      //shoot missile if space is pressed
+      public void Update()
+      {
+         if (Input.GetKeyDown(KeyCode.Space))
+         {
+            shoot_missile();
+         }
+      }
       [ContextMenu("Shoot Missile")]
       public void shoot_missile()
       {
          GameObject missile = Instantiate(missile_prefab, spawn_points[0].position, spawn_points[0].rotation);
-         missile.GetComponent<homing_missile>().target = target;
-         missile.GetComponent<homing_missile>().targetpointer.GetComponent<homing_missile_pointer>().target = target;
-         // missile.GetComponent<homing_missile>().shooter = this.gameObject;
-         missile.GetComponent<homing_missile>().usemissile();
+         var missileScript = missile.GetComponent<homing_missile>();
+         var missileTowerDamage = GetComponent<TowerBehaviour>().currentDamage;
+         missileScript.target = target;
+         missileScript.explosionDamage = missileTowerDamage;
+         missileScript.targetpointer.GetComponent<homing_missile_pointer>().target = target;
+         missileScript.usemissile();
       }
    }
 }

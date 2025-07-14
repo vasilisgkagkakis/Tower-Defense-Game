@@ -30,7 +30,7 @@ public class TowerPlacement : MonoBehaviour
 
             if (Physics.Raycast(camray, out hit, 100f, PlacementCollideMask))
             {
-                float yOffset = (currentTowerName == "turret_2") ? 0.12f : 0f;
+                float yOffset = currentTowerName.StartsWith("turret_2") ? 0.12f : 0f;
                 CurrentPlacingTower.transform.position = hit.point + new Vector3(0, yOffset, 0);
 
                 BoxCollider TowerCollider = CurrentPlacingTower.GetComponent<BoxCollider>();

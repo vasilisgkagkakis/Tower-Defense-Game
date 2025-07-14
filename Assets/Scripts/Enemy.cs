@@ -27,5 +27,11 @@ public class Enemy : MonoBehaviour
     {
         DistanceTravelled += Vector3.Distance(transform.position, lastPosition);
         lastPosition = transform.position;
+
+        if(Health <= 0)
+        {
+            GetComponent<Ragdoll>().EnableRagdoll(transform.position);
+            GetComponent<NavMeshAgent>().enabled = false;
+        }
     }
 }

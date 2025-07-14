@@ -1,23 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+
 namespace HomingMissile
 {
     public class homing_missile : MonoBehaviour
     {
         public int speed = 60;
-        public int downspeed = 30;
-        public int damage = 35;
-        public bool fully_active = false;
+        public float explosionRadius = 3f;
+        public float explosionDamage = 350f;
+        public GameObject[] explosionEffect;
         public int timebeforeactivition = 1;
         public int timebeforebursting = 1;
         public int timebeforedestruction = 1;
         public int timealive;
         public GameObject target;
-        public GameObject shooter;
         public Rigidbody projectilerb;
         public bool isactive = false;
-        public Vector3 sleepposition;
         public GameObject targetpointer;
         public float turnSpeed = 0.035f;
         public AudioSource launch_sound;
@@ -26,57 +26,64 @@ namespace HomingMissile
         public ParticleSystem smoke;
         public GameObject smoke_position;
         public GameObject destroy_effect;
+        public bool rotate = true;
+        public bool velocity = true;
+
         private void Start()
         {
             projectilerb = this.GetComponent<Rigidbody>();
         }
-        public void call_destroy_effects()
-        {
-            Instantiate(destroy_effect, transform.position, transform.rotation);
-        }
-        public void setmissile()
-        {
-            timealive = 0;
-            transform.rotation = shooter.transform.rotation;
-            transform.Rotate(0, 90, 0);
-            transform.position = shooter.transform.position;
-        }
 
-        [System.Obsolete]
-        public void DestroyMe()
-        {
-            isactive = false;
-            fully_active = false;
-            timealive = 0;
-            smoke.transform.SetParent(null);
-            smoke.Pause();
-            smoke.transform.position = sleepposition;
-            smoke.Play();
-            projectilerb.velocity = Vector3.zero;
-            thrust_sound.Pause();
-            call_destroy_effects();
-            transform.position = sleepposition;
-            Destroy(smoke.gameObject, 3);
-            Destroy(this.gameObject);
-        }
         public void usemissile()
         {
             launch_sound.Play();
             isactive = true;
-            // setmissile();
-
         }
 
-        [System.Obsolete]
-        private void OnCollisionEnter(Collision other)
+        private void OnTriggerEnter(Collider other)
         {
-            if (isactive)
+            // Only explode if hitting an enemy parent collider
+            if (other.CompareTag("Enemy"))
             {
-                if (other.gameObject.CompareTag("Enemy"))
+                Explode();
+            }
+        }
+
+        private void Explode()
+        {
+            if (explosionEffect != null)
+            {
+                if (explosionEffect.Length > 0 && explosionEffect[0] != null)
                 {
-                    DestroyMe();
+                    // Spawn a random explosion effect from the array
+                    int randomIndex = Random.Range(0, explosionEffect.Length);
+                    GameObject effect = Instantiate(explosionEffect[randomIndex], transform.position, Quaternion.identity);
+                    Debug.Log("Explosion effect instantiated: " + effect.name);
+                    Destroy(effect, 2f);
                 }
             }
+
+            // Area damage (optional, if you want splash)
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+            foreach (var hit in hitColliders)
+            {
+                if (hit.CompareTag("Enemy"))
+                {
+                    Enemy enemy = hit.GetComponentInParent<Enemy>();
+                    if (enemy != null)
+                    {
+                        enemy.Health -= explosionDamage;
+                    }
+                }
+            }
+
+            Destroy(gameObject);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, explosionRadius);
         }
 
         [System.Obsolete]
@@ -84,35 +91,21 @@ namespace HomingMissile
         {
             if (isactive)
             {
-                // if (!target.activeInHierarchy)
-                // {
-                //     DestroyMe();
-                // }
                 if (timealive == timebeforeactivition)
                 {
-                    fully_active = true;
                     thrust_sound.Play();
                 }
                 timealive++;
-                // if (timealive < timebeforebursting)
-                // {
-                //     projectilerb.velocity = transform.up * -1 * downspeed;
-                // }
                 if (timealive == timebeforebursting)
                 {
-                    smoke = (Instantiate(smoke_obj, smoke_position.transform.position, smoke_position.transform.rotation)).GetComponent<ParticleSystem>();
+                    smoke = Instantiate(smoke_obj, smoke_position.transform.position, smoke_position.transform.rotation).GetComponent<ParticleSystem>();
                     smoke.Play();
                     smoke.transform.SetParent(this.transform);
                 }
-                // if (timealive == timebeforedestruction)
-                // {
-                //     DestroyMe();
-                // }
                 if (timealive >= timebeforebursting && timealive < timebeforedestruction)
                 {
-                    Debug.Log("Missile is active");
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetpointer.transform.rotation, turnSpeed);
-                    projectilerb.velocity = transform.forward * speed;
+                    if(rotate)transform.rotation = Quaternion.Slerp(transform.rotation, targetpointer.transform.rotation, turnSpeed);
+                    if(velocity)projectilerb.velocity = transform.forward * speed;
                 }
             }
         }

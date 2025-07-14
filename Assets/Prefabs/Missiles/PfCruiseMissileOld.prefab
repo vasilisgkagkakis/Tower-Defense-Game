@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -616424680855157592}
   - component: {fileID: 376336460302366770}
   - component: {fileID: -8671139747365113940}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PfCruiseMissileOld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8216806710200307196}
@@ -51,19 +51,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f051b6fa11d5f0e4eb39928d4c6d588c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  downspeed: 30
-  damage: 35
-  fully_active: 0
-  timebeforeactivition: 20
-  timebeforebursting: 40
+  speed: 6
+  explosionRadius: 3
+  explosionDamage: 35
+  explosionEffect:
+  - {fileID: 7354695869903840038, guid: 8d03efb8852445040b36a90d33f0f5c6, type: 3}
+  - {fileID: 3702631383622039973, guid: fbbda809d59774e4cbd37c5c2341e9a8, type: 3}
+  - {fileID: 3345248989584403936, guid: 6b5e9c3dedde64240ac58831af0e3754, type: 3}
+  - {fileID: 4158566037266319950, guid: 560fa62f9d26e2b43b2c468779d4686c, type: 3}
+  - {fileID: 6008809819809278124, guid: c2f612ce6ae600349bf6c84ecd17b91c, type: 3}
+  - {fileID: 6372287369205285200, guid: 6d4d5d5fac238a7448ada0cebba5d560, type: 3}
+  timebeforeactivition: 0
+  timebeforebursting: 0
   timebeforedestruction: 450
   timealive: 0
   target: {fileID: 0}
-  shooter: {fileID: 0}
   projectilerb: {fileID: -342486710392381615}
   isactive: 0
-  sleepposition: {x: 200, y: 200, z: 200}
   targetpointer: {fileID: 6330590385505746336}
   turnSpeed: 0.035
   launch_sound: {fileID: 376336460302366770}
@@ -72,6 +76,8 @@ MonoBehaviour:
   smoke: {fileID: 8193907743918563093, guid: db97ba35f680c914480ecc075d752dbf, type: 3}
   smoke_position: {fileID: 7951875701062871563}
   destroy_effect: {fileID: 4868538168526089871, guid: 7bcf29c8fbb433f4cbc27a4ae6ac2b79, type: 3}
+  rotate: 1
+  velocity: 1
 --- !u!54 &-342486710392381615
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -109,7 +115,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -325,7 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8216806710200307196}
   - component: {fileID: 2045040713571348512}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: missile_pointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,7 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3175785671534849324}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: smoke_position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +391,7 @@ Transform:
   m_GameObject: {fileID: 7951875701062871563}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -403,9 +409,25 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: e31d0aedc9dd8b04d93100e9b77830cb, type: 2}
+    - target: {fileID: -4369887415061721944, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -451,9 +473,25 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: e31d0aedc9dd8b04d93100e9b77830cb, type: 2}
+    - target: {fileID: -1818842609758388285, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -1568803400689042508, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
       propertyPath: m_Name
       value: CruiseMissile
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 631342636281883952, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5575115065722428287, guid: 4ab581e06f3b88042b9154887d4c359e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -486,7 +524,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

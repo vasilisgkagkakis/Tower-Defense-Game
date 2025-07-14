@@ -8,6 +8,7 @@ TagManager:
   - PlaceNotAllowed
   - Enemy
   - AimPoint
+  - homing_missile
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Enemy
   - RagdollEnemy
   - Bullet
-  - 
+  - Missile
   - 
   - 
   - 
