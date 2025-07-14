@@ -58,8 +58,7 @@ namespace HomingMissile
                     // Spawn a random explosion effect from the array
                     int randomIndex = Random.Range(0, explosionEffect.Length);
                     GameObject effect = Instantiate(explosionEffect[randomIndex], transform.position, Quaternion.identity);
-                    Debug.Log("Explosion effect instantiated: " + effect.name);
-                    Destroy(effect, 2f);
+                    // Destroy(effect, 2f);
                 }
             }
 
