@@ -53,7 +53,7 @@ public class TowerDescriptionUI : MonoBehaviour
         {
             upgradeButton.onClick.RemoveAllListeners();
             upgradeButton.onClick.AddListener(OnUpgradeButton);
-            upgradeButton.interactable = (currentTower.upgradeLevel + 1 < currentTower.upgradePrefabs.Length);
+            upgradeButton.interactable = currentTower.upgradeLevel + 1 < currentTower.upgradePrefabs.Length;
         }
 
         DescriptionUI.SetActive(true);
