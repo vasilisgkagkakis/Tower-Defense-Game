@@ -35,36 +35,6 @@ public class TowerDescriptionUI : MonoBehaviour
         var data = tower.towerData;
         if (damage != null) damage.text = $"Damage: {tower.currentDamage}";
         if (areaType != null) areaType.text = data.isAreaDamage ? "Target: Area" : "Type: Single";
-        
-        // Show sell value
-        if (sellValueText != null)
-        {
-            int sellValue = tower.towerData.CalculateSellValue(tower.totalInvestment);
-            sellValueText.text = $"Sell: ${sellValue}";
-        }
-        
-        // Show upgrade cost
-        if (upgradeCostText != null)
-        {
-            bool canUpgrade = tower.upgradeLevel < tower.upgradePrefabs.Length;
-            if (canUpgrade && tower.towerData.upgradeCosts.Length > tower.actualUpgradeLevel)
-            {
-                int upgradeCost = tower.towerData.upgradeCosts[tower.actualUpgradeLevel];
-                upgradeCostText.text = $"Upgrade: ${upgradeCost}";
-            }
-            else
-            {
-                upgradeCostText.text = "Max Level";
-            }
-        }
-
-        // Setup dropdown options if not already set
-        if (targetingDropdown != null && targetingDropdown.options.Count == 0)
-        {
-            targetingDropdown.options.Clear();
-            foreach (var name in System.Enum.GetNames(typeof(TowerTargeting.TargetType)))
-                targetingDropdown.options.Add(new TMP_Dropdown.OptionData(name));
-        }
 
         if (targetingDropdown != null)
         {
@@ -78,17 +48,21 @@ public class TowerDescriptionUI : MonoBehaviour
         {
             upgradeButton.onClick.RemoveAllListeners();
             upgradeButton.onClick.AddListener(OnUpgradeButton);
-            
+
             bool canUpgrade = currentTower.upgradeLevel < currentTower.upgradePrefabs.Length;
             bool hasEnoughCurrency = true;
-            
+
             if (canUpgrade && CurrencyManager.Instance != null)
             {
-                int upgradeCost = currentTower.towerData.upgradeCosts.Length > currentTower.actualUpgradeLevel ? 
-                    currentTower.towerData.upgradeCosts[currentTower.actualUpgradeLevel] : 100;
+                int upgradeCost = currentTower.towerData.upgradeCosts[currentTower.actualUpgradeLevel];
                 hasEnoughCurrency = CurrencyManager.Instance.GetCurrency() >= upgradeCost;
+                upgradeCostText.text = $"Upgrade (${upgradeCost})";
             }
-            
+            else
+            {
+                upgradeCostText.text = "Max Level";
+            }
+
             upgradeButton.interactable = canUpgrade && hasEnoughCurrency;
         }
 
@@ -98,6 +72,10 @@ public class TowerDescriptionUI : MonoBehaviour
             sellButton.onClick.RemoveAllListeners();
             sellButton.onClick.AddListener(OnSellButton);
             sellButton.interactable = true; // Can always sell a placed tower
+
+            // Show sell value
+            int sellValue = tower.towerData.CalculateSellValue(tower.totalInvestment);
+            sellValueText.text = $"Sell (${sellValue})";
         }
 
         DescriptionUI.SetActive(true);
@@ -136,12 +114,12 @@ public class TowerDescriptionUI : MonoBehaviour
 
         // Calculate sell value using TowerData method
         int sellValue = tower.towerData.CalculateSellValue(tower.totalInvestment);
-        
+
         // Add currency
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.AddCurrency(sellValue);
-            Debug.Log($"Sold tower for {sellValue} coins (75% of {tower.totalInvestment} invested)");
+            // Debug.Log($"Sold tower for {sellValue} coins (75% of {tower.totalInvestment} invested)");
         }
 
         // Clear selection and hide UI
@@ -149,7 +127,7 @@ public class TowerDescriptionUI : MonoBehaviour
         {
             TowerSelector.selectedTower = null;
         }
-        
+
         if (TowerSelector.lastHighlightedTower == tower)
         {
             TowerSelector.lastHighlightedTower = null;
