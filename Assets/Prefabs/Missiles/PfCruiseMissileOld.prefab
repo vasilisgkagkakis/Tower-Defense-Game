@@ -69,7 +69,7 @@ MonoBehaviour:
   projectilerb: {fileID: -342486710392381615}
   isactive: 0
   targetpointer: {fileID: 6330590385505746336}
-  turnSpeed: 0.035
+  turnSpeed: 0.05
   launch_sound: {fileID: 376336460302366770}
   thrust_sound: {fileID: 376336460302366770}
   smoke_obj: {fileID: 9155463838991273943, guid: db97ba35f680c914480ecc075d752dbf, type: 3}
@@ -115,7 +115,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

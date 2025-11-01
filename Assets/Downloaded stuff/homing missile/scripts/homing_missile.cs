@@ -19,7 +19,7 @@ namespace HomingMissile
         public Rigidbody projectilerb;
         public bool isactive = false;
         public GameObject targetpointer;
-        public float turnSpeed = 0.035f;
+        public float turnSpeed = 0.15f;
         public AudioSource launch_sound;
         public AudioSource thrust_sound;
         public GameObject smoke_obj;
@@ -57,12 +57,11 @@ namespace HomingMissile
                 {
                     // Spawn a random explosion effect from the array
                     int randomIndex = Random.Range(0, explosionEffect.Length);
-                    GameObject effect = Instantiate(explosionEffect[randomIndex], transform.position, Quaternion.identity);
-                    // Destroy(effect, 2f);
+                    Instantiate(explosionEffect[randomIndex], transform.position, Quaternion.identity);
                 }
             }
 
-            // Area damage (optional, if you want splash)
+            // Area damage
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
             foreach (var hit in hitColliders)
             {
@@ -103,8 +102,22 @@ namespace HomingMissile
                 }
                 if (timealive >= timebeforebursting && timealive < timebeforedestruction)
                 {
-                    if(rotate)transform.rotation = Quaternion.Slerp(transform.rotation, targetpointer.transform.rotation, turnSpeed);
-                    if(velocity)projectilerb.velocity = transform.forward * speed;
+                    if (rotate)
+                    {
+                        // Optional: Dynamic turn speed based on distance to target
+                        float dynamicTurnSpeed = turnSpeed;
+                        if (target != null)
+                        {
+                            float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+                            // Turn faster when closer to target (within 5 units)
+                            if (distanceToTarget < 5f)
+                            {
+                                dynamicTurnSpeed = turnSpeed * 2f; // Double the turn speed when close
+                            }
+                        }
+                        transform.rotation = Quaternion.Slerp(transform.rotation, targetpointer.transform.rotation, dynamicTurnSpeed);
+                    }
+                    if (velocity) projectilerb.velocity = transform.forward * speed;
                 }
             }
         }
