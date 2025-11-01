@@ -112,6 +112,14 @@ public class TowerPlacement : MonoBehaviour
         if (!canPlace) return;
 
         var behaviour = CurrentPlacingTower.GetComponent<TowerBehaviour>();
+        
+        // Deduct cost when placing tower
+        if (CurrencyManager.Instance != null && !CurrencyManager.Instance.SpendCurrency(behaviour.towerData.baseCost))
+        {
+            Debug.Log("Not enough currency to place tower!");
+            return;
+        }
+        
         behaviour.isPlaced = true;
         towerCollider.isTrigger = false;
 

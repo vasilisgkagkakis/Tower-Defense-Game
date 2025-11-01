@@ -52,6 +52,9 @@ public class TowerSelector : MonoBehaviour
 
         if (Keyboard.current.uKey.wasPressedThisFrame)
             selectedTower.UpgradeTower();
+
+        if (Keyboard.current.xKey.wasPressedThisFrame && TowerDescriptionUI.Instance != null)
+            TowerDescriptionUI.Instance.OnSellButton();
     }
 
     private void HandleClickSelection()

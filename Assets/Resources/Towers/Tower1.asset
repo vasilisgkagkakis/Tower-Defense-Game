@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 20
   isAreaDamage: 0
+  baseCost: 100
+  upgradeCosts: 96000000fa000000
+  turretName: Basic Turret
+  description: A basic defensive turret

@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 30
   isAreaDamage: 1
+  baseCost: 300
+  upgradeCosts: c800000090010000
+  turretName: Rocket Turret
+  description: A rocket defensive turret

@@ -1,18 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TowerBehaviour : MonoBehaviour
 {
     public TowerData towerData;
     public TowerTargeting.TargetType targetType = TowerTargeting.TargetType.First;
-    public Dropdown targetingDropdown;
 
     // Upgrade system
     public GameObject[] upgradePrefabs;
     public int upgradeLevel = 0;
+    public int actualUpgradeLevel = 0; // The real upgrade level in the progression (0=base, 1=first upgrade, etc)
     public float[] upgradeDamages;
     public float currentDamage;
     [SerializeField] private Color resetColor;
+
+    [Header("Economy")]
+    public int totalInvestment = 0; // Track total money invested
 
     public bool isPlaced = false; // Set this to true when the tower is placed
 
@@ -21,6 +23,12 @@ public class TowerBehaviour : MonoBehaviour
         if (currentDamage <= 0)
         {
             currentDamage = towerData.damage;
+        }
+
+        // Initialize total investment with base cost if this is the first level
+        if (upgradeLevel == 0 && totalInvestment == 0)
+        {
+            totalInvestment = towerData.baseCost;
         }
     }
 
@@ -32,8 +40,17 @@ public class TowerBehaviour : MonoBehaviour
             return;
         }
 
-        if (upgradeLevel + 1 < upgradePrefabs.Length)
+        if (upgradeLevel < upgradePrefabs.Length)
         {
+            // Check if player has enough currency for upgrade
+            int upgradeCost = towerData.upgradeCosts.Length > actualUpgradeLevel ? towerData.upgradeCosts[actualUpgradeLevel] : 100;
+
+            if (CurrencyManager.Instance == null || !CurrencyManager.Instance.SpendCurrency(upgradeCost))
+            {
+                Debug.Log("Not enough currency to upgrade!");
+                return;
+            }
+
             upgradeLevel++; // Increment first!
 
             // Instantiate the next prefab at the same position/rotation
@@ -42,8 +59,11 @@ public class TowerBehaviour : MonoBehaviour
             newBehaviour.isPlaced = true; // Mark the new tower as placed
             newBehaviour.SetHighlight();
 
-            // Copy over targeting mode, etc.
+            // Copy over targeting mode and investment (but reset upgrade level for new prefab)
             newBehaviour.targetType = this.targetType;
+            newBehaviour.upgradeLevel = 0; // Reset to 0 because each prefab starts fresh
+            newBehaviour.actualUpgradeLevel = this.actualUpgradeLevel + 1; // Track the real progression level
+            newBehaviour.totalInvestment = this.totalInvestment + upgradeCost;
 
             // Set new damage if you want to override TowerData
             if (upgradeDamages.Length > upgradeLevel)
@@ -54,8 +74,8 @@ public class TowerBehaviour : MonoBehaviour
                 TowerDescriptionUI.Instance.Show(newBehaviour);
 
             // Update the selected tower reference
-            TowerSelector.selectedTower = newBehaviour; // <-- Add this line
-            TowerSelector.lastHighlightedTower = newBehaviour; // Add this line
+            TowerSelector.selectedTower = newBehaviour;
+            TowerSelector.lastHighlightedTower = newBehaviour;
 
             // Destroy the old tower
             Destroy(gameObject);
