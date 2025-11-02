@@ -328,7 +328,7 @@ public class WaveManager : MonoBehaviour
             }
             else
             {
-                colors.normalColor = Color.white; // White
+                colors.normalColor = Color.white;
                 colors.highlightedColor = new Color(0.96f, 0.96f, 0.96f, 1f);
             }
             startWaveButton.colors = colors;
