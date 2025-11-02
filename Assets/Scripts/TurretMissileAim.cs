@@ -5,7 +5,7 @@ public class TurretMissileAim : MonoBehaviour
 {
     public Transform turretMount;            // Rotating part of the turret
     public float turnSpeed = 5f;
-    public float detectionRange = 30f;
+    public float detectionRange = 15f;
     public float yRotationOffset = 0f;   
     public float zRotationOffset = 0f;     
     private Transform target;
@@ -68,8 +68,8 @@ public class TurretMissileAim : MonoBehaviour
             return;
         }
 
-        Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType);
-        if (enemy != null && Vector3.Distance(transform.position, enemy.transform.position) <= detectionRange)
+        Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType, detectionRange);
+        if (enemy != null)
             target = enemy.transform;
         else
             target = null;
@@ -78,6 +78,13 @@ public class TurretMissileAim : MonoBehaviour
     private void ShootMissile()
     {
         if (target == null || missilePrefab == null) return;
+        
+        // Double-check target is still valid (enemy could have died between Update and this call)
+        if (target.gameObject == null || !target.gameObject.activeInHierarchy)
+        {
+            Debug.Log("🚫 Target became invalid before missile launch");
+            return;
+        }
         
         // Use first spawn point (can be extended to use multiple like bullets)
         Transform spawnPoint = StartPoint.Length > 0 ? StartPoint[0] : transform;
@@ -88,6 +95,9 @@ public class TurretMissileAim : MonoBehaviour
         
         if (missileScript != null)
         {
+            // Set originating turret reference for consistent targeting
+            missileScript.originatingTurret = towerBehaviour;
+            
             // Set target
             missileScript.target = target.gameObject;
             
@@ -107,7 +117,7 @@ public class TurretMissileAim : MonoBehaviour
             // Activate missile
             missileScript.usemissile();
             
-            Debug.Log($"🚀 Missile launched at {target.name} with {towerBehaviour.currentDamage} damage");
+            Debug.Log($"🚀 Missile launched at {target.name} with {towerBehaviour.currentDamage} damage (targeting: {towerBehaviour.targetType})");
         }
     }
 }

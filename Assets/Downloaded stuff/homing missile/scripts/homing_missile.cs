@@ -34,6 +34,10 @@ namespace HomingMissile
         [Header("Predictive Targeting")]
         [Range(0f, 1f)]
         public float predictionStrength = 0.7f; // How much to lead the target (0 = no prediction, 1 = full prediction)
+        
+        [Header("Turret Integration")]
+        [HideInInspector]
+        public TowerBehaviour originatingTurret; // Reference to the turret that fired this missile
 
         private void Start()
         {
@@ -95,7 +99,7 @@ namespace HomingMissile
             // Check if current target is dead or invalid
             if (target == null || !target.activeInHierarchy || IsTargetDead())
             {
-                GameObject newTarget = FindClosestLivingEnemy();
+                GameObject newTarget = FindTargetUsingTurretLogic();
                 if (newTarget != null)
                 {
                     // Retarget to new enemy
@@ -129,6 +133,42 @@ namespace HomingMissile
             }
 
             return false; // If no Enemy component, assume alive
+        }
+
+        private GameObject FindTargetUsingTurretLogic()
+        {
+            // If we have an originating turret, use its targeting logic
+            if (originatingTurret != null)
+            {
+                // Try to get the turret's detection range (missiles should use a larger range for retargeting)
+                float turretRange = float.MaxValue; // Default to no range limit
+                
+                // Check if the turret has a TurretAim or TurretMissileAim component for range
+                var turretAim = originatingTurret.GetComponent<TurretAim>();
+                if (turretAim != null)
+                {
+                    turretRange = turretAim.detectionRange * 2f; // Missiles get double range for retargeting
+                }
+                else
+                {
+                    var missileAim = originatingTurret.GetComponent<TurretMissileAim>();
+                    if (missileAim != null)
+                    {
+                        turretRange = missileAim.detectionRange * 2f; // Missiles get double range for retargeting
+                    }
+                }
+                
+                Enemy enemyTarget = TowerTargeting.GetTarget(originatingTurret, originatingTurret.targetType, turretRange);
+                if (enemyTarget != null)
+                {
+                    Debug.Log($"🎯 Missile using turret targeting logic ({originatingTurret.targetType}) with range {turretRange}: {enemyTarget.name}");
+                    return enemyTarget.gameObject;
+                }
+            }
+
+            // Fallback to closest enemy if no turret reference
+            Debug.Log("🎯 Missile fallback to closest targeting (no turret reference)");
+            return FindClosestLivingEnemy();
         }
 
         private GameObject FindClosestLivingEnemy()

@@ -52,8 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  explosionRadius: 3
-  explosionDamage: 35
+  explosionRadius: 6
+  explosionDamage: 0
   explosionEffect:
   - {fileID: 7354695869903840038, guid: 8d03efb8852445040b36a90d33f0f5c6, type: 3}
   - {fileID: 3702631383622039973, guid: fbbda809d59774e4cbd37c5c2341e9a8, type: 3}
@@ -79,7 +79,8 @@ MonoBehaviour:
   rotate: 1
   velocity: 1
   retargetRange: 15
-  predictionStrength: 1
+  predictionStrength: 0.7
+  originatingTurret: {fileID: 0}
 --- !u!54 &-342486710392381615
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ public class TurretAim : MonoBehaviour
 {
     public Transform turretMount;            // Rotating part of the turret
     public float turnSpeed = 5f;
-    public float detectionRange = 30f;
+    public float detectionRange = 15f;
     public float yRotationOffset = 0f;   
     public float zRotationOffset = 0f;     
     private Transform target;
@@ -67,8 +67,8 @@ public class TurretAim : MonoBehaviour
             return;
         }
 
-        Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType);
-        if (enemy != null && Vector3.Distance(transform.position, enemy.transform.position) <= detectionRange)
+        Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType, detectionRange);
+        if (enemy != null)
             target = enemy.transform;
         else
             target = null;
@@ -88,12 +88,21 @@ public class TurretAim : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
+            // Check if target is still valid before each shot
+            if (target == null)
+            {
+                Debug.Log("🚫 Target became null during firing sequence - stopping barrage");
+                yield break;
+            }
+
             var sp = StartPoint[i];
             if (sp == null) continue;
+            
             Vector3 start = sp.position;
-            Transform aimPoint = target.Find("AimPoint");
             Vector3 end;
-
+            
+            // Safely try to find AimPoint
+            Transform aimPoint = target.Find("AimPoint");
             if (aimPoint != null)
             {
                 end = aimPoint.position;
@@ -114,7 +123,6 @@ public class TurretAim : MonoBehaviour
             if (i < count - 1)
                 yield return new WaitForSeconds(delay);
         }
-
     }
 
     private void FireBulletFromPoint(Transform sp, Vector3 end)

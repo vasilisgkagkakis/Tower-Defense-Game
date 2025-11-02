@@ -49,8 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turretMount: {fileID: 638827524223053075}
   turnSpeed: 10
-  detectionRange: 30
+  detectionRange: 15
   yRotationOffset: -90
+  zRotationOffset: 0
   StartPoint:
   - {fileID: 170813290214419199}
   - {fileID: 2807333005960089725}
@@ -73,12 +74,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerData: {fileID: 11400000, guid: 6910ae7568d9ee34cb88922f8e282b40, type: 2}
   targetType: 0
-  targetingDropdown: {fileID: 0}
   upgradePrefabs: []
   upgradeLevel: 0
+  actualUpgradeLevel: 0
   upgradeDamages: []
   currentDamage: 0
   resetColor: {r: 1, g: 1, b: 1, a: 1}
+  totalInvestment: 0
   isPlaced: 0
 --- !u!65 &4203171739727076775
 BoxCollider:
