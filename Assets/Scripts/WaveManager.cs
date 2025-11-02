@@ -335,7 +335,6 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    // Called by other systems
     public bool IsWaveInProgress()
     {
         return waveInProgress;
