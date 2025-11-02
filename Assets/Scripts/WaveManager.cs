@@ -321,7 +321,16 @@ public class WaveManager : MonoBehaviour
 
             // Change button color for boss waves
             ColorBlock colors = startWaveButton.colors;
-            colors.normalColor = nextIsBossWave ? Color.red : Color.white;
+            if (!nextIsBossWave)
+            {
+                colors.normalColor = new Color(0f, 1f, 1f, 1f);
+                colors.highlightedColor = new Color(0f, 1f, 1f, 0.8f);
+            }
+            else
+            {
+                colors.normalColor = Color.white; // White
+                colors.highlightedColor = new Color(0.96f, 0.96f, 0.96f, 1f);
+            }
             startWaveButton.colors = colors;
         }
     }
