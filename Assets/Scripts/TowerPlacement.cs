@@ -17,6 +17,11 @@ public class TowerPlacement : MonoBehaviour
     [SerializeField] private Button button1;
     [SerializeField] private Button button2;
     [SerializeField] private Button button3;
+    
+    [Header("Tower Costs")]
+    [SerializeField] private int tower1Cost = 100;
+    [SerializeField] private int tower2Cost = 400;
+    [SerializeField] private int tower3Cost = 600;
 
     [SerializeField] private Color allowedTint = new Color(0.5f, 1f, 0.5f, 0.3f);
     [SerializeField] private Color blockedTint = new Color(1f, 0.5f, 0.5f, 0.3f);
@@ -34,20 +39,36 @@ public class TowerPlacement : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        // Initialize button states based on starting currency
+        UpdateButtonAffordability();
+    }
+
     void Update()
     {
         HandleTowerHotkeys();
         UpdatePlacementPreview();
+        UpdateButtonAffordability();
     }
 
     private void HandleTowerHotkeys()
     {
         Button btn = null;
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) btn = button1;
-        else if (Keyboard.current.digit2Key.wasPressedThisFrame) btn = button2;
-        else if (Keyboard.current.digit3Key.wasPressedThisFrame) btn = button3;
+        int cost = 0;
+        
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) { btn = button1; cost = tower1Cost; }
+        else if (Keyboard.current.digit2Key.wasPressedThisFrame) { btn = button2; cost = tower2Cost; }
+        else if (Keyboard.current.digit3Key.wasPressedThisFrame) { btn = button3; cost = tower3Cost; }
 
         if (btn == null) return;
+        
+        // Check if player can afford the tower
+        if (CurrencyManager.Instance == null || !CanAffordTower(cost))
+        {
+            Debug.Log($"Not enough currency! Need {cost}, have {CurrencyManager.Instance?.GetCurrency() ?? 0}");
+            return;
+        }
 
         SetTowerButtonsEnabled(false);
         DestroyCurrentPreviewIfAny();
@@ -148,9 +169,20 @@ public class TowerPlacement : MonoBehaviour
 
         IsPlacingTower = !enable;
 
-        button1.interactable = enable;
-        button2.interactable = enable;
-        button3.interactable = enable;
+        if (enable)
+        {
+            // When enabling, check affordability for each button
+            button1.interactable = CanAffordTower(tower1Cost);
+            button2.interactable = CanAffordTower(tower2Cost);
+            button3.interactable = CanAffordTower(tower3Cost);
+        }
+        else
+        {
+            // When disabling (placing mode), disable all buttons
+            button1.interactable = false;
+            button2.interactable = false;
+            button3.interactable = false;
+        }
 
         button1.GetComponent<Image>().raycastTarget = enable;
         button2.GetComponent<Image>().raycastTarget = enable;
@@ -179,5 +211,25 @@ public class TowerPlacement : MonoBehaviour
             block.SetColor("_Color", tint);
             r.SetPropertyBlock(block);
         }
+    }
+    
+    private void UpdateButtonAffordability()
+    {
+        if (isPlacingTower) return; // Don't update when placing towers
+        
+        if (CurrencyManager.Instance != null)
+        {
+            int currentCurrency = CurrencyManager.Instance.GetCurrency();
+            
+            // Update button interactability based on affordability
+            if (button1 != null) button1.interactable = CanAffordTower(tower1Cost);
+            if (button2 != null) button2.interactable = CanAffordTower(tower2Cost);
+            if (button3 != null) button3.interactable = CanAffordTower(tower3Cost);
+        }
+    }
+    
+    private bool CanAffordTower(int cost)
+    {
+        return CurrencyManager.Instance != null && CurrencyManager.Instance.GetCurrency() >= cost;
     }
 }

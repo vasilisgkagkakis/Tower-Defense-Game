@@ -16,11 +16,17 @@ public class TurretMissileAim : MonoBehaviour
     [SerializeField] GameObject missilePrefab;
 
     private float fireTimer = 0f;
-    public float fireInterval = 2f; // seconds between missile shots (slower than bullets)
+    private float fireInterval = 2f; // Will be set from TowerData
 
     void Awake()
     {
         towerBehaviour = GetComponent<TowerBehaviour>();
+        
+        // Set fire interval from tower data
+        if (towerBehaviour != null && towerBehaviour.towerData != null)
+        {
+            fireInterval = towerBehaviour.towerData.fireInterval;
+        }
     }
 
     void Update()

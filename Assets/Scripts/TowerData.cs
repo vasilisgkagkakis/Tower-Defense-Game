@@ -7,6 +7,7 @@ public class TowerData : ScriptableObject
     [Header("Combat")]
     public float damage;
     public bool isAreaDamage;
+    public float fireInterval = 1f; // Seconds between shots
     
     [Header("Economy")]
     public int baseCost = 100;           // Cost to buy this turret

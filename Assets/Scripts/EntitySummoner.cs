@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class EntitySummoner : MonoBehaviour
 {
+    public static EntitySummoner Instance;
     public static List<Enemy> EnemiesInGame;
     public static Dictionary<int, GameObject> EnemyPrefabs;
 
@@ -15,7 +16,21 @@ public class EntitySummoner : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
         spawnPoint = spawnPointInstance;
+    }
+
+    void Start()
+    {
+        Init();
     }
 
     public static void Init()
@@ -45,7 +60,6 @@ public class EntitySummoner : MonoBehaviour
             return null;
         }
 
-        // Always create a new enemy - no pooling
         GameObject enemyObject = Instantiate(EnemyPrefabs[EnemyID], spawnPoint.position, Quaternion.identity);
         Enemy newEnemy = enemyObject.GetComponent<Enemy>();
         
@@ -63,6 +77,35 @@ public class EntitySummoner : MonoBehaviour
         }
 
         return newEnemy;
+    }
+
+    // Instance method for WaveManager to use with custom spawn position
+    public GameObject SummonEnemy(int EnemyID, Vector3 spawnPosition)
+    {
+        if (!EnemyPrefabs.ContainsKey(EnemyID))
+        {
+            Debug.LogError("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
+            return null;
+        }
+
+        // Always create a new enemy - no pooling
+        GameObject enemyObject = Instantiate(EnemyPrefabs[EnemyID], spawnPosition, Quaternion.identity);
+        Enemy newEnemy = enemyObject.GetComponent<Enemy>();
+        
+        if (newEnemy != null)
+        {
+            newEnemy.ID = EnemyID;
+            EnemiesInGame.Add(newEnemy);
+            
+            // Debug.Log($"Spawned new enemy with ID: {EnemyID} at {spawnPosition}");
+        }
+        else
+        {
+            Debug.LogError($"Enemy prefab with ID {EnemyID} doesn't have an Enemy component!");
+            Destroy(enemyObject);
+        }
+
+        return enemyObject;
     }
 
     public static void RemoveEnemy(Enemy EnemyToRemove)

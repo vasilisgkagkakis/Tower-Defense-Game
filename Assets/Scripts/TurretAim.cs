@@ -15,11 +15,17 @@ public class TurretAim : MonoBehaviour
     [SerializeField] LineRenderer bulletTrail;
 
     private float fireTimer = 0f;
-    public float fireInterval = 1f; // seconds between shots
+    private float fireInterval = 1f; // Will be set from TowerData
 
     void Awake()
     {
         towerBehaviour = GetComponent<TowerBehaviour>();
+        
+        // Set fire interval from tower data
+        if (towerBehaviour != null && towerBehaviour.towerData != null)
+        {
+            fireInterval = towerBehaviour.towerData.fireInterval;
+        }
     }
 
     void Update()

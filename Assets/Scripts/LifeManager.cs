@@ -30,6 +30,11 @@ public class LifeManager : MonoBehaviour
     {
         return currentLives;
     }
+    
+    public int GetCurrentLives()
+    {
+        return currentLives;
+    }
 
     public bool LoseLife()
     {

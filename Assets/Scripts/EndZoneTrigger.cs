@@ -48,6 +48,12 @@ public class EndZoneTrigger : MonoBehaviour
                         Debug.LogError("LifeManager.Instance is null! Make sure LifeManager is in the scene.");
                     }
 
+                    // Notify wave manager that enemy reached the end
+                    if (WaveManager.Instance != null)
+                    {
+                        WaveManager.Instance.OnEnemyReachedEnd();
+                    }
+
                     // Remove the enemy that reached the end
                     if (EntitySummoner.EnemiesInGame.Contains(enemy))
                     {
