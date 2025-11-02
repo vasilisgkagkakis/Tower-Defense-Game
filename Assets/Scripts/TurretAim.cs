@@ -14,7 +14,7 @@ public class TurretAim : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] LineRenderer bulletTrail;
 
-    private float fireTimer = 0f;
+    private float fireTimer;
     private float fireInterval = 1f; // Will be set from TowerData
 
     void Awake()
@@ -26,6 +26,9 @@ public class TurretAim : MonoBehaviour
         {
             fireInterval = towerBehaviour.towerData.fireInterval;
         }
+        
+        // Initialize fireTimer to fireInterval so turret can fire immediately when placed
+        fireTimer = fireInterval;
     }
 
     void Update()
@@ -124,6 +127,9 @@ public class TurretAim : MonoBehaviour
             lineR.SetPosition(1, end);
             Destroy(bulletTrailEffect, 1f);
 
+            // Play turret shooting sound based on turret type
+            PlayTurretShootSound();
+
             // Apply damage instantly (hitscan style)
             ApplyInstantDamage(target);
 
@@ -174,6 +180,28 @@ public class TurretAim : MonoBehaviour
             }
 
             Destroy(bullet, 2f);
+        }
+    }
+    
+    private void PlayTurretShootSound()
+    {
+        if (AudioManager.Instance == null) return;
+        
+        // Identify turret type by TowerData name or GameObject name
+        if (towerBehaviour != null && towerBehaviour.towerData != null)
+        {
+            string turretName = towerBehaviour.towerData.turretName.ToLower();
+            
+            if (turretName.Contains("basic"))
+            {
+                AudioManager.Instance.PlayTurret1Shoot();
+                return;
+            }
+            else if (turretName.Contains("advanced"))
+            {
+                AudioManager.Instance.PlayTurret3Shoot();
+                return;
+            }
         }
     }
 }

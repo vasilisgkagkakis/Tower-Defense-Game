@@ -8,12 +8,20 @@ public class AudioManager : MonoBehaviour
     public AudioSource backgroundMusicSource;
     public AudioSource soundEffectsSource;
     
+    [Header("Missile Audio")]
+    private AudioSource missileThrustSource;  // Created dynamically for missile thrust
+    
     [Header("Audio Clips")]
     public AudioClip[] backgroundMusicTracks;
-    public AudioClip explosionSound;
     
-    private float backgroundMusicVolume = 0.7f;
-    private float soundEffectsVolume = 0.8f;
+    [Header("Missile Sound Effects")]
+    public AudioClip missileLaunch;    // Used for missile launch (one-shot)
+    public AudioClip missileThrust;    // Used for ongoing thrust (looping)
+    public AudioClip explosionSound;  // Used when missiles explode
+    
+    [Header("Turret Sound Effects")]
+    public AudioClip turret1Shoot;    // Turret 1 shooting sound
+    public AudioClip turret3Shoot;    // Turret 3 shooting sound
     
     void Awake()
     {
@@ -32,6 +40,7 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         PlayBackgroundMusic();
+        CreateMissileThrustSource();
         
         // Register our audio sources with the GlobalAudioController MANUALLY
         // This prevents auto-registration from causing conflicts
@@ -47,48 +56,33 @@ public class AudioManager : MonoBehaviour
                 GlobalAudioController.Instance.RegisterSoundEffect(soundEffectsSource);
                 Debug.Log("🔊 AudioManager registered sound effects source");
             }
+            if (missileThrustSource != null)
+            {
+                GlobalAudioController.Instance.RegisterSoundEffect(missileThrustSource);
+                Debug.Log("🚀 AudioManager registered missile thrust source");
+            }
         }
     }
     
     private void LoadAudioSettings()
     {
-        backgroundMusicVolume = PlayerPrefs.GetFloat("BackgroundMusicVolume", 0.7f);
-        soundEffectsVolume = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.8f);
-        
-        UpdateAudioSources();
+        // Settings loading is now handled by GlobalAudioController
+        // This is kept for compatibility but does nothing
+        Debug.Log("📋 AudioManager settings loading is handled by GlobalAudioController");
     }
     
-    private void UpdateAudioSources()
-    {
-        if (backgroundMusicSource != null)
-        {
-            backgroundMusicSource.volume = backgroundMusicVolume;
-        }
-        
-        if (soundEffectsSource != null)
-        {
-            soundEffectsSource.volume = soundEffectsVolume;
-        }
-    }
-    
+    // Volume control is now handled by GlobalAudioController
+    // These methods are kept for potential compatibility but do nothing
     public void SetBackgroundMusicVolume(float volume)
     {
-        backgroundMusicVolume = volume;
-        if (backgroundMusicSource != null)
-        {
-            backgroundMusicSource.volume = volume;
-        }
-        PlayerPrefs.SetFloat("BackgroundMusicVolume", volume);
+        // Deprecated: Use GlobalAudioController.Instance.SetBackgroundMusicVolume() instead
+        Debug.LogWarning("AudioManager.SetBackgroundMusicVolume is deprecated. Use GlobalAudioController instead.");
     }
     
     public void SetSoundEffectsVolume(float volume)
     {
-        soundEffectsVolume = volume;
-        if (soundEffectsSource != null)
-        {
-            soundEffectsSource.volume = volume;
-        }
-        PlayerPrefs.SetFloat("SoundEffectsVolume", volume);
+        // Deprecated: Use GlobalAudioController.Instance.SetSoundEffectsVolume() instead  
+        Debug.LogWarning("AudioManager.SetSoundEffectsVolume is deprecated. Use GlobalAudioController instead.");
     }
     
     public void PlayBackgroundMusic(int trackIndex = 0)
@@ -120,9 +114,42 @@ public class AudioManager : MonoBehaviour
         }
     }
     
-    // Convenience method for explosion sound (used by missiles)
+    private void CreateMissileThrustSource()
+    {
+        if (missileThrustSource == null)
+        {
+            // Create a dedicated AudioSource for missile thrust
+            missileThrustSource = gameObject.AddComponent<AudioSource>();
+            missileThrustSource.playOnAwake = false;
+            missileThrustSource.loop = true;
+        }
+    }
+    
+    // Missile sound methods - all controlled by sliders via GlobalAudioController
+    public void PlayMissileLaunch() => PlaySoundEffect(missileLaunch);
+    
+    public void StartMissileThrust()
+    {
+        if (missileThrustSource != null && missileThrust != null && !missileThrustSource.isPlaying)
+        {
+            missileThrustSource.clip = missileThrust;
+            missileThrustSource.Play();
+            Debug.Log("🚀 Started missile thrust sound");
+        }
+    }
+    
+    public void StopMissileThrust()
+    {
+        if (missileThrustSource != null && missileThrustSource.isPlaying)
+        {
+            missileThrustSource.Stop();
+            Debug.Log("🛑 Stopped missile thrust sound");
+        }
+    }
+    
     public void PlayExplosion() => PlaySoundEffect(explosionSound);
     
-    public float GetBackgroundMusicVolume() => backgroundMusicVolume;
-    public float GetSoundEffectsVolume() => soundEffectsVolume;
+    // Turret sound methods - all controlled by sliders via GlobalAudioController
+    public void PlayTurret1Shoot() => PlaySoundEffect(turret1Shoot);
+    public void PlayTurret3Shoot() => PlaySoundEffect(turret3Shoot);
 }

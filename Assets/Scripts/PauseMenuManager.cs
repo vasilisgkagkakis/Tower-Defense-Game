@@ -25,10 +25,6 @@ public class PauseMenuManager : MonoBehaviour
     public TextMeshProUGUI backgroundMusicLabel;
     public TextMeshProUGUI soundEffectsLabel;
     
-    [Header("Audio Sources")]
-    public AudioSource backgroundMusicSource;
-    public AudioSource soundEffectsSource;
-    
     [Header("Instructions")]
     public TextMeshProUGUI instructionsText;
     
@@ -218,22 +214,10 @@ Don't let them reach the end zone!";
     
     private void OnBackgroundMusicVolumeChanged(float value)
     {
-        // Use the new GlobalAudioController system
+        // Use GlobalAudioController - it manages all audio sources automatically
         if (GlobalAudioController.Instance != null)
         {
             GlobalAudioController.Instance.SetBackgroundMusicVolume(value);
-        }
-        
-        // Fallback for direct audio source (backward compatibility)
-        if (backgroundMusicSource != null)
-        {
-            backgroundMusicSource.volume = value;
-        }
-        
-        // Legacy AudioManager support
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetBackgroundMusicVolume(value);
         }
         
         if (backgroundMusicLabel != null)
@@ -244,22 +228,10 @@ Don't let them reach the end zone!";
     
     private void OnSoundEffectsVolumeChanged(float value)
     {
-        // Use the new GlobalAudioController system - handles ALL sound effects automatically!
+        // Use GlobalAudioController - it manages all audio sources automatically
         if (GlobalAudioController.Instance != null)
         {
             GlobalAudioController.Instance.SetSoundEffectsVolume(value);
-        }
-        
-        // Fallback for direct audio source (backward compatibility)
-        if (soundEffectsSource != null)
-        {
-            soundEffectsSource.volume = value;
-        }
-        
-        // Legacy AudioManager support
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetSoundEffectsVolume(value);
         }
         
         if (soundEffectsLabel != null)
@@ -288,18 +260,11 @@ Don't let them reach the end zone!";
         OnBackgroundMusicVolumeChanged(bgMusicVolume);
         OnSoundEffectsVolumeChanged(sfxVolume);
         
-        // Sync with new GlobalAudioController
+        // Apply volumes using GlobalAudioController
         if (GlobalAudioController.Instance != null)
         {
             GlobalAudioController.Instance.SetBackgroundMusicVolume(bgMusicVolume);
             GlobalAudioController.Instance.SetSoundEffectsVolume(sfxVolume);
-        }
-        
-        // Legacy AudioManager support
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetBackgroundMusicVolume(bgMusicVolume);
-            AudioManager.Instance.SetSoundEffectsVolume(sfxVolume);
         }
     }
     

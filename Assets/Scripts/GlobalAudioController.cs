@@ -155,7 +155,7 @@ public class GlobalAudioController : MonoBehaviour
         
         // Save setting
         PlayerPrefs.SetFloat("SoundEffectsVolume", soundEffectsVolume);
-        Debug.Log($"🔊 Sound effects volume set to: {(soundEffectsVolume * 100):F0}%");
+        Debug.Log($"🔊 Sound effects volume set to: {soundEffectsVolume * 100:F0}%");
     }
     
     /// <summary>

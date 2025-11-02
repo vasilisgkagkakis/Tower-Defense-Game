@@ -372,18 +372,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 60
-  downspeed: 30
-  damage: 35
-  fully_active: 0
+  explosionRadius: 3
+  explosionDamage: 350
+  explosionEffect: []
   timebeforeactivition: 20
   timebeforebursting: 40
   timebeforedestruction: 450
   timealive: 0
   target: {fileID: 0}
-  shooter: {fileID: 0}
   projectilerb: {fileID: 6573806827650273691}
   isactive: 0
-  sleepposition: {x: 200, y: 200, z: 200}
   targetpointer: {fileID: 6573806826466953269}
   turnSpeed: 0.035
   launch_sound: {fileID: 6573806827650273694}
@@ -392,6 +390,11 @@ MonoBehaviour:
   smoke: {fileID: 0}
   smoke_position: {fileID: 6573806826555785937}
   destroy_effect: {fileID: 4868538168526089871, guid: 7bcf29c8fbb433f4cbc27a4ae6ac2b79, type: 3}
+  rotate: 1
+  velocity: 1
+  retargetRange: 20
+  predictionStrength: 0.7
+  originatingTurret: {fileID: 0}
 --- !u!1001 &253571061231918946
 PrefabInstance:
   m_ObjectHideFlags: 0

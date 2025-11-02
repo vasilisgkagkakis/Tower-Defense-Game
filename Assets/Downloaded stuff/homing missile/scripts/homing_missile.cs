@@ -17,8 +17,6 @@ namespace HomingMissile
         public bool isactive = false;
         public GameObject targetpointer;
         public float turnSpeed = 0.15f;
-        public AudioSource launch_sound;
-        public AudioSource thrust_sound;
         public GameObject smoke_obj;
         public ParticleSystem smoke;
         public GameObject smoke_position;
@@ -43,20 +41,24 @@ namespace HomingMissile
         {
             projectilerb = GetComponent<Rigidbody>();
             
-            // Register audio sources with the new GlobalAudioController
-            if (GlobalAudioController.Instance != null)
+            // All audio is now handled centrally by AudioManager - no registration needed
+        }
+        
+        void OnDestroy()
+        {
+            // Ensure thrust sound stops when missile is destroyed
+            if (AudioManager.Instance != null)
             {
-                if (launch_sound != null) GlobalAudioController.Instance.RegisterSoundEffect(launch_sound);
-                if (thrust_sound != null) GlobalAudioController.Instance.RegisterSoundEffect(thrust_sound);
+                AudioManager.Instance.StopMissileThrust();
             }
         }
 
         public void usemissile()
         {
-            // Just play the sound - volume is automatically managed by GlobalAudioController
-            if (launch_sound != null)
+            // Play launch sound through centralized AudioManager (controlled by slider)
+            if (AudioManager.Instance != null)
             {
-                launch_sound.Play();
+                AudioManager.Instance.PlayMissileLaunch();
             }
             
             isactive = true;
@@ -73,9 +75,10 @@ namespace HomingMissile
 
         private void Explode()
         {
-            // Play explosion sound through AudioManager
+            // Stop thrust sound and play explosion sound through AudioManager
             if (AudioManager.Instance != null)
             {
+                AudioManager.Instance.StopMissileThrust();
                 AudioManager.Instance.PlayExplosion();
             }
             
@@ -230,10 +233,10 @@ namespace HomingMissile
             {
                 if (timealive == timebeforeactivition)
                 {
-                    // Just play the sound - volume is automatically managed
-                    if (thrust_sound != null)
+                    // Start thrust sound (looping) through centralized AudioManager
+                    if (AudioManager.Instance != null)
                     {
-                        thrust_sound.Play();
+                        AudioManager.Instance.StartMissileThrust();
                     }
                 }
                 timealive++;

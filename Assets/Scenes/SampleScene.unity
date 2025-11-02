@@ -3405,8 +3405,6 @@ MonoBehaviour:
   soundEffectsSlider: {fileID: 1859523430}
   backgroundMusicLabel: {fileID: 771623250}
   soundEffectsLabel: {fileID: 995795468}
-  backgroundMusicSource: {fileID: 0}
-  soundEffectsSource: {fileID: 0}
   instructionsText: {fileID: 0}
 --- !u!1 &586683264
 GameObject:
@@ -4926,7 +4924,11 @@ MonoBehaviour:
   backgroundMusicSource: {fileID: 844589127}
   soundEffectsSource: {fileID: 844589126}
   backgroundMusicTracks: []
+  missileLaunch: {fileID: 0}
+  missileThrust: {fileID: 8300000, guid: f83e3ca4784322448bb131083bc9a85d, type: 3}
   explosionSound: {fileID: 8300000, guid: 1f5d14f7476b211498beb3c81883de6e, type: 3}
+  turret1Shoot: {fileID: 8300000, guid: 8d2ffe810fa89ef4fad702cafd3838a7, type: 3}
+  turret3Shoot: {fileID: 8300000, guid: 37025960c61b77245872d410c9640b6b, type: 3}
 --- !u!4 &844589129
 Transform:
   m_ObjectHideFlags: 0

@@ -103,7 +103,6 @@ GameObject:
   - component: {fileID: -1711129083455117390}
   - component: {fileID: 9009583079814500374}
   - component: {fileID: 1497658467358991513}
-  - component: {fileID: 4075355102140874889}
   m_Layer: 7
   m_Name: turret_2_3
   m_TagString: PlaceNotAllowed
@@ -202,7 +201,6 @@ MonoBehaviour:
   - {fileID: 3411237768665107462}
   - {fileID: 3194098475901403156}
   missilePrefab: {fileID: 3956545706807500900, guid: 8eb288548eec2d14db4955db1f4bfefe, type: 3}
-  fireInterval: 4
 --- !u!114 &9009583079814500374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,24 +244,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 11.598864, y: 8.166369, z: 10.586357}
   m_Center: {x: 0.017080307, y: 3.7279468, z: -0.02038002}
---- !u!114 &4075355102140874889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 917774090126069439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e039c393e942081448899fba2f1355de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  missile_prefab: {fileID: 3956545706807500900, guid: 8eb288548eec2d14db4955db1f4bfefe, type: 3}
-  target: {fileID: 0}
-  spawn_points:
-  - {fileID: 6789279463195854061}
-  - {fileID: 3411237768665107462}
-  - {fileID: 3194098475901403156}
 --- !u!1 &2046379586142220456
 GameObject:
   m_ObjectHideFlags: 0
