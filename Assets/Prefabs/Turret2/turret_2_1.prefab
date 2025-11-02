@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 917774090125841055}
   - component: {fileID: 917774090129265343}
   - component: {fileID: 917774090128265343}
-  - component: {fileID: 1986809309449173864}
+  - component: {fileID: 7672386509954795689}
   - component: {fileID: 9009583079814500374}
   - component: {fileID: 1497658467358991513}
   - component: {fileID: 8430999905417925225}
@@ -180,7 +180,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1986809309449173864
+--- !u!114 &7672386509954795689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 917774090126069439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63b439ec89ce91d429fb3d27324bc4ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 6672e2b485ea0494fb03ffc06ae2412f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   turretMount: {fileID: 917774090125841053}
@@ -197,10 +197,12 @@ MonoBehaviour:
   detectionRange: 30
   yRotationOffset: -90
   zRotationOffset: 25
-  StartPoint: []
-  bulletPrefab: {fileID: 0}
-  bulletTrail: {fileID: 0}
-  fireInterval: 1
+  StartPoint:
+  - {fileID: 6151349365719040118}
+  - {fileID: 7226399341000392358}
+  - {fileID: 5656822295559623248}
+  missilePrefab: {fileID: 3956545706807500900, guid: 8eb288548eec2d14db4955db1f4bfefe, type: 3}
+  fireInterval: 2
 --- !u!114 &9009583079814500374
 MonoBehaviour:
   m_ObjectHideFlags: 0

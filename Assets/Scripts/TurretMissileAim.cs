@@ -1,0 +1,113 @@
+using UnityEngine;
+using HomingMissile;
+
+public class TurretMissileAim : MonoBehaviour
+{
+    public Transform turretMount;            // Rotating part of the turret
+    public float turnSpeed = 5f;
+    public float detectionRange = 30f;
+    public float yRotationOffset = 0f;   
+    public float zRotationOffset = 0f;     
+    private Transform target;
+    private TowerBehaviour towerBehaviour;
+
+    [Header("Missile Settings")]
+    [SerializeField] Transform[] StartPoint;
+    [SerializeField] GameObject missilePrefab;
+
+    private float fireTimer = 0f;
+    public float fireInterval = 2f; // seconds between missile shots (slower than bullets)
+
+    void Awake()
+    {
+        towerBehaviour = GetComponent<TowerBehaviour>();
+    }
+
+    void Update()
+    {
+        // Only function if tower is placed (not in preview mode)
+        if (towerBehaviour == null || !towerBehaviour.isPlaced)
+        {
+            target = null; // Clear target when not placed
+            return;
+        }
+
+        FindTargetByType();
+
+        if (target != null)
+        {
+            Vector3 direction = target.position - turretMount.position;
+            direction.y = 0f; // Only rotate around Y
+
+            if (direction.sqrMagnitude > 0.01f)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                Quaternion adjustedRotation = lookRotation * Quaternion.Euler(0, yRotationOffset, zRotationOffset);
+                turretMount.rotation = Quaternion.Slerp(turretMount.rotation, adjustedRotation, Time.deltaTime * turnSpeed);
+            }
+
+            // Fire timer - only when tower is placed
+            fireTimer += Time.deltaTime;
+            if (fireTimer >= fireInterval)
+            {
+                ShootMissile();
+                fireTimer = 0f;
+            }
+        }
+        else
+        {
+            fireTimer = fireInterval; // Ready to fire immediately when a target appears
+        }
+    }
+
+    void FindTargetByType()
+    {
+        if (towerBehaviour == null || !towerBehaviour.isPlaced) 
+        {
+            target = null;
+            return;
+        }
+
+        Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType);
+        if (enemy != null && Vector3.Distance(transform.position, enemy.transform.position) <= detectionRange)
+            target = enemy.transform;
+        else
+            target = null;
+    }
+
+    private void ShootMissile()
+    {
+        if (target == null || missilePrefab == null) return;
+        
+        // Use first spawn point (can be extended to use multiple like bullets)
+        Transform spawnPoint = StartPoint.Length > 0 ? StartPoint[0] : transform;
+        
+        // Instantiate missile
+        GameObject missile = Instantiate(missilePrefab, spawnPoint.position, spawnPoint.rotation);
+        var missileScript = missile.GetComponent<homing_missile>();
+        
+        if (missileScript != null)
+        {
+            // Set target
+            missileScript.target = target.gameObject;
+            
+            // Set damage from tower
+            missileScript.explosionDamage = towerBehaviour.currentDamage;
+            
+            // Set target pointer
+            if (missileScript.targetpointer != null)
+            {
+                var pointerScript = missileScript.targetpointer.GetComponent<homing_missile_pointer>();
+                if (pointerScript != null)
+                {
+                    pointerScript.target = target.gameObject;
+                }
+            }
+            
+            // Activate missile
+            missileScript.usemissile();
+            
+            Debug.Log($"🚀 Missile launched at {target.name} with {towerBehaviour.currentDamage} damage");
+        }
+    }
+}

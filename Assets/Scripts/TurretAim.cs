@@ -24,6 +24,13 @@ public class TurretAim : MonoBehaviour
 
     void Update()
     {
+        // Only function if tower is placed (not in preview mode)
+        if (towerBehaviour == null || !towerBehaviour.isPlaced)
+        {
+            target = null; // Clear target when not placed
+            return;
+        }
+
         FindTargetByType();
 
         if (target != null)
@@ -38,7 +45,7 @@ public class TurretAim : MonoBehaviour
                 turretMount.rotation = Quaternion.Slerp(turretMount.rotation, adjustedRotation, Time.deltaTime * turnSpeed);
             }
 
-            // Fire timer
+            // Fire timer - only when tower is placed
             fireTimer += Time.deltaTime;
             if (fireTimer >= fireInterval)
             {
@@ -54,7 +61,11 @@ public class TurretAim : MonoBehaviour
 
     void FindTargetByType()
     {
-        if (towerBehaviour == null) return;
+        if (towerBehaviour == null || !towerBehaviour.isPlaced) 
+        {
+            target = null;
+            return;
+        }
 
         Enemy enemy = TowerTargeting.GetTarget(towerBehaviour, towerBehaviour.targetType);
         if (enemy != null && Vector3.Distance(transform.position, enemy.transform.position) <= detectionRange)
