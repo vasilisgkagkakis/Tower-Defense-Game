@@ -42,11 +42,23 @@ namespace HomingMissile
         private void Start()
         {
             projectilerb = GetComponent<Rigidbody>();
+            
+            // Register audio sources with the new GlobalAudioController
+            if (GlobalAudioController.Instance != null)
+            {
+                if (launch_sound != null) GlobalAudioController.Instance.RegisterSoundEffect(launch_sound);
+                if (thrust_sound != null) GlobalAudioController.Instance.RegisterSoundEffect(thrust_sound);
+            }
         }
 
         public void usemissile()
         {
-            launch_sound.Play();
+            // Just play the sound - volume is automatically managed by GlobalAudioController
+            if (launch_sound != null)
+            {
+                launch_sound.Play();
+            }
+            
             isactive = true;
         }
 
@@ -61,6 +73,12 @@ namespace HomingMissile
 
         private void Explode()
         {
+            // Play explosion sound through AudioManager
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayExplosion();
+            }
+            
             if (explosionEffect != null)
             {
                 if (explosionEffect.Length > 0 && explosionEffect[0] != null)
@@ -212,7 +230,11 @@ namespace HomingMissile
             {
                 if (timealive == timebeforeactivition)
                 {
-                    thrust_sound.Play();
+                    // Just play the sound - volume is automatically managed
+                    if (thrust_sound != null)
+                    {
+                        thrust_sound.Play();
+                    }
                 }
                 timealive++;
                 if (timealive == timebeforebursting)

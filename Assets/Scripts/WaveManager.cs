@@ -70,6 +70,9 @@ public class WaveManager : MonoBehaviour
     public void StartNextWave()
     {
         if (waveInProgress || !waitingForWaveStart) return;
+        
+        // Don't start wave if game is paused
+        if (PauseMenuManager.Instance != null && PauseMenuManager.Instance.IsGamePaused()) return;
 
         currentWave++;
         waveInProgress = true;
@@ -78,6 +81,8 @@ public class WaveManager : MonoBehaviour
 
         if (startWaveButton != null)
             startWaveButton.interactable = false;
+        
+    
 
         StartCoroutine(SpawnWave());
     }
@@ -321,7 +326,7 @@ public class WaveManager : MonoBehaviour
 
             // Change button color for boss waves
             ColorBlock colors = startWaveButton.colors;
-            if (!nextIsBossWave)
+            if (nextIsBossWave)
             {
                 colors.normalColor = new Color(0f, 1f, 1f, 1f);
                 colors.highlightedColor = new Color(0f, 1f, 1f, 0.8f);
