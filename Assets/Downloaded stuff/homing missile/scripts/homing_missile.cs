@@ -30,6 +30,10 @@ namespace HomingMissile
         public float retargetRange = 15f; // Range to look for new targets
         private float retargetCheckInterval = 0.25f; // Check every 0.25 seconds
         private float retargetTimer = 0f;
+        
+        [Header("Predictive Targeting")]
+        [Range(0f, 1f)]
+        public float predictionStrength = 0.7f; // How much to lead the target (0 = no prediction, 1 = full prediction)
 
         private void Start()
         {

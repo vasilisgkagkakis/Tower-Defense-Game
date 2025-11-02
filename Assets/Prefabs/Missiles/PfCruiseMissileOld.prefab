@@ -79,6 +79,7 @@ MonoBehaviour:
   rotate: 1
   velocity: 1
   retargetRange: 15
+  predictionStrength: 1
 --- !u!54 &-342486710392381615
 Rigidbody:
   m_ObjectHideFlags: 0
