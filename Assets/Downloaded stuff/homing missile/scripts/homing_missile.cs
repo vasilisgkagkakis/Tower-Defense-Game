@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace HomingMissile
 {
@@ -29,9 +26,14 @@ namespace HomingMissile
         public bool rotate = true;
         public bool velocity = true;
 
+        [Header("Smart Targeting")]
+        public float retargetRange = 15f; // Range to look for new targets
+        private float retargetCheckInterval = 0.25f; // Check every 0.25 seconds
+        private float retargetTimer = 0f;
+
         private void Start()
         {
-            projectilerb = this.GetComponent<Rigidbody>();
+            projectilerb = GetComponent<Rigidbody>();
         }
 
         public void usemissile()
@@ -78,10 +80,85 @@ namespace HomingMissile
             Destroy(gameObject);
         }
 
+        private void CheckAndRetargetIfNeeded()
+        {
+            retargetTimer += Time.fixedDeltaTime;
+
+            // Only check periodically to avoid performance issues
+            if (retargetTimer < retargetCheckInterval) return;
+            retargetTimer = 0f;
+
+            // Check if current target is dead or invalid
+            if (target == null || !target.activeInHierarchy || IsTargetDead())
+            {
+                GameObject newTarget = FindClosestLivingEnemy();
+                if (newTarget != null)
+                {
+                    // Retarget to new enemy
+                    target = newTarget;
+                    if (targetpointer != null)
+                    {
+                        var pointerScript = targetpointer.GetComponent<homing_missile_pointer>();
+                        if (pointerScript != null)
+                        {
+                            pointerScript.target = newTarget;
+                        }
+                    }
+                    Debug.Log($"🎯 Missile retargeted to {newTarget.name}");
+                }
+                else
+                {
+                    // No targets available - explode
+                    Debug.Log("💥 No targets available - missile exploding");
+                    Explode();
+                }
+            }
+        }
+
+        private bool IsTargetDead()
+        {
+            if (target == null) return true;
+
+            if (target.TryGetComponent<Enemy>(out var enemy))
+            {
+                return enemy.Health <= 0;
+            }
+
+            return false; // If no Enemy component, assume alive
+        }
+
+        private GameObject FindClosestLivingEnemy()
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject closest = null;
+            float closestDistance = retargetRange;
+
+            foreach (GameObject enemy in enemies)
+            {
+                if (enemy == null || !enemy.activeInHierarchy) continue;
+
+                Enemy enemyScript = enemy.GetComponent<Enemy>();
+                if (enemyScript != null && enemyScript.Health <= 0) continue; // Skip dead enemies
+
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                if (distance < closestDistance)
+                {
+                    closest = enemy;
+                    closestDistance = distance;
+                }
+            }
+
+            return closest;
+        }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, explosionRadius);
+
+            // Draw retarget range
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, retargetRange);
         }
 
         [System.Obsolete]
@@ -98,10 +175,13 @@ namespace HomingMissile
                 {
                     smoke = Instantiate(smoke_obj, smoke_position.transform.position, smoke_position.transform.rotation).GetComponent<ParticleSystem>();
                     smoke.Play();
-                    smoke.transform.SetParent(this.transform);
+                    smoke.transform.SetParent(transform);
                 }
                 if (timealive >= timebeforebursting && timealive < timebeforedestruction)
                 {
+                    // Check if current target is still valid
+                    CheckAndRetargetIfNeeded();
+
                     if (rotate)
                     {
                         // Optional: Dynamic turn speed based on distance to target

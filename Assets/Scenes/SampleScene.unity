@@ -1992,8 +1992,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: {fileID: 725648815}
   areaType: {fileID: 1007518981}
-  sellValueText: {fileID: 0}
-  upgradeCostText: {fileID: 0}
+  sellValueText: {fileID: 1644828884}
+  upgradeCostText: {fileID: 965296846}
   targetingDropdown: {fileID: 289482100}
   DescriptionUI: {fileID: 1352664095}
   upgradeButton: {fileID: 259327512}
@@ -3138,7 +3138,7 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -4828,67 +4828,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1556856452}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &1583450337
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -314285624202827475, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8141130273175327156, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_Name
-      value: Enemy1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -11.088119
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.14999986
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8912846266568477454, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8ec6137902e3c8b44a47ebdcdc241eec, type: 3}
 --- !u!1 &1636375634
 GameObject:
   m_ObjectHideFlags: 0
@@ -5084,7 +5023,7 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -7814,4 +7753,3 @@ SceneRoots:
   - {fileID: 554946832}
   - {fileID: 56450962}
   - {fileID: 1776000298}
-  - {fileID: 1583450337}

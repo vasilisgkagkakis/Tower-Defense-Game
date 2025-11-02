@@ -78,6 +78,7 @@ MonoBehaviour:
   destroy_effect: {fileID: 4868538168526089871, guid: 7bcf29c8fbb433f4cbc27a4ae6ac2b79, type: 3}
   rotate: 1
   velocity: 1
+  retargetRange: 15
 --- !u!54 &-342486710392381615
 Rigidbody:
   m_ObjectHideFlags: 0
