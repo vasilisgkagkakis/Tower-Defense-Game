@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Enemy4
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 8736240208329510101, guid: 935264455f4b40f4ab5ea045bf9d7a3c, type: 3}
-  EnemyID: 1
+  EnemyID: 4

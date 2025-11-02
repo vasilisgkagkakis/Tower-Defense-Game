@@ -5,8 +5,8 @@ public class TurretAim : MonoBehaviour
     public Transform turretMount;            // Rotating part of the turret
     public float turnSpeed = 5f;
     public float detectionRange = 15f;
-    public float yRotationOffset = 0f;   
-    public float zRotationOffset = 0f;     
+    public float yRotationOffset = 0f;
+    public float zRotationOffset = 0f;
     private Transform target;
     private TowerBehaviour towerBehaviour;
 
@@ -61,7 +61,7 @@ public class TurretAim : MonoBehaviour
 
     void FindTargetByType()
     {
-        if (towerBehaviour == null || !towerBehaviour.isPlaced) 
+        if (towerBehaviour == null || !towerBehaviour.isPlaced)
         {
             target = null;
             return;
@@ -97,10 +97,10 @@ public class TurretAim : MonoBehaviour
 
             var sp = StartPoint[i];
             if (sp == null) continue;
-            
+
             Vector3 start = sp.position;
             Vector3 end;
-            
+
             // Safely try to find AimPoint
             Transform aimPoint = target.Find("AimPoint");
             if (aimPoint != null)
@@ -118,10 +118,26 @@ public class TurretAim : MonoBehaviour
             lineR.SetPosition(1, end);
             Destroy(bulletTrailEffect, 1f);
 
+            // Apply damage instantly (hitscan style)
+            ApplyInstantDamage(target);
+
             FireBulletFromPoint(sp, end);
 
             if (i < count - 1)
                 yield return new WaitForSeconds(delay);
+        }
+    }
+
+    private void ApplyInstantDamage(Transform target)
+    {
+        if (target == null || towerBehaviour == null) return;
+
+        Enemy enemy = target.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            // Apply damage instantly (hitscan style)
+            enemy.TakeDamage(towerBehaviour.currentDamage);
+            // Debug.Log($"Turret hit {enemy.name} for {towerBehaviour.currentDamage} damage!");
         }
     }
 
@@ -141,11 +157,14 @@ public class TurretAim : MonoBehaviour
             Quaternion rot = Quaternion.LookRotation(spreadDirection) * Quaternion.Euler(0, 180f, 0);
             GameObject bullet = Instantiate(bulletPrefab, start, rot);
 
+            // The bullet prefab is just visual decoration that falls to ground
+            // Damage is applied instantly via LineRenderer in ApplyInstantDamage()
+
             // Give a small forward force (along -Z)
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddForce(-bullet.transform.forward, ForceMode.Impulse); // -forward for -Z
+                rb.AddForce(-bullet.transform.forward, ForceMode.Impulse);
             }
 
             Destroy(bullet, 2f);

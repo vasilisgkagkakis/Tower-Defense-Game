@@ -54,16 +54,18 @@ public class Ragdoll : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         
-        // Debug.Log($"Cleaning up ragdoll: {gameObject.name}");
+        Debug.Log($"Cleaning up ragdoll: {gameObject.name}");
         
         // Remove from EntitySummoner tracking and destroy
         Enemy enemyScript = GetComponent<Enemy>();
         if (enemyScript != null)
         {
+            Debug.Log($"Removing enemy from summoner tracking: {gameObject.name}");
             EntitySummoner.RemoveEnemy(enemyScript);
         }
         else
         {
+            Debug.Log($"Enemy script not found on ragdoll: {gameObject.name}");
             // Fallback: just destroy
             Destroy(gameObject);
         }
@@ -76,12 +78,5 @@ public class Ragdoll : MonoBehaviour
         {
             SetAllChildLayers(childTransform, layerName);
         }
-    }
-
-    private IEnumerator EnableRagdollDelayed(Vector3 hitpoint, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        EnableRagdoll(hitpoint);
-        Destroy(gameObject, 3f); // Destroy the game object after 10 seconds to prevent memory leaks
     }
 }

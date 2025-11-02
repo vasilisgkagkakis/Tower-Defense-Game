@@ -879,7 +879,7 @@ MonoBehaviour:
   - {fileID: 6281489304299448737}
   bulletPrefab: {fileID: 2100843152729171084, guid: df78893d758854e45ae7cbae4b0a2723, type: 3}
   bulletTrail: {fileID: 120648884187509030, guid: bfc369bff94296747a4a087a745b9176, type: 3}
-  fireInterval: 1
+  fireInterval: 2
 --- !u!114 &9185334468565711010
 MonoBehaviour:
   m_ObjectHideFlags: 0

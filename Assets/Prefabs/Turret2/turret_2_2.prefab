@@ -233,7 +233,7 @@ MonoBehaviour:
   - {fileID: 8477680761930093276}
   - {fileID: 8496112635121277860}
   missilePrefab: {fileID: 3956545706807500900, guid: 8eb288548eec2d14db4955db1f4bfefe, type: 3}
-  fireInterval: 2
+  fireInterval: 4
 --- !u!114 &9009583079814500374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,8 +254,8 @@ MonoBehaviour:
   upgradeLevel: 0
   actualUpgradeLevel: 0
   upgradeDamages:
-  - 50
-  - 80
+  - 200
+  - 400
   currentDamage: 0
   resetColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
   totalInvestment: 0

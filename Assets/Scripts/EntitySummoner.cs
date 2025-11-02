@@ -52,7 +52,6 @@ public class EntitySummoner : MonoBehaviour
         if (newEnemy != null)
         {
             newEnemy.ID = EnemyID;
-            newEnemy.Init();
             EnemiesInGame.Add(newEnemy);
             
             // Debug.Log($"Spawned new enemy with ID: {EnemyID} at {spawnPoint.position}");

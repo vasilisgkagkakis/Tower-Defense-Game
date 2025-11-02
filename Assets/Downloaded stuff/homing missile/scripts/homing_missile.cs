@@ -80,7 +80,7 @@ namespace HomingMissile
                     Enemy enemy = hit.GetComponentInParent<Enemy>();
                     if (enemy != null)
                     {
-                        enemy.Health -= explosionDamage;
+                        enemy.TakeDamage(explosionDamage);
                     }
                 }
             }

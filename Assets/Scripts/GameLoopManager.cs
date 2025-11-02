@@ -12,7 +12,7 @@ public class GameLoopManager : MonoBehaviour
         EntitySummoner.Init();
 
         StartCoroutine(GameLoop());
-        InvokeRepeating("SummonTest", 0f, 100);
+        InvokeRepeating("SummonTest", 0f, 10f);
         // InvokeRepeating("RemoveTest", 0f, 2f);
     }
 

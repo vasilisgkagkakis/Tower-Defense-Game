@@ -202,7 +202,7 @@ MonoBehaviour:
   - {fileID: 3411237768665107462}
   - {fileID: 3194098475901403156}
   missilePrefab: {fileID: 3956545706807500900, guid: 8eb288548eec2d14db4955db1f4bfefe, type: 3}
-  fireInterval: 2
+  fireInterval: 4
 --- !u!114 &9009583079814500374
 MonoBehaviour:
   m_ObjectHideFlags: 0

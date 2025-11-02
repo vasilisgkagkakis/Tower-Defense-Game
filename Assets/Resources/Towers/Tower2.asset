@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994366414e7c519459bb759952de4b2f, type: 3}
   m_Name: Tower2
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 80
   isAreaDamage: 1
-  baseCost: 300
+  baseCost: 400
   upgradeCosts: c800000090010000
   turretName: Rocket Turret
   description: A rocket defensive turret
