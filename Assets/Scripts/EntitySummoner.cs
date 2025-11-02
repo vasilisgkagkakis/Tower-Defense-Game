@@ -5,7 +5,6 @@ public class EntitySummoner : MonoBehaviour
 {
     public static List<Enemy> EnemiesInGame;
     public static Dictionary<int, GameObject> EnemyPrefabs;
-    public static Dictionary<int, Queue<Enemy>> EnemyObjectPools;
 
     [SerializeField]
     private Transform spawnPointInstance; // Assign in Inspector
@@ -24,70 +23,61 @@ public class EntitySummoner : MonoBehaviour
         if (!IsInitialized)
         {
             EnemyPrefabs = new Dictionary<int, GameObject>();
-            EnemyObjectPools = new Dictionary<int, Queue<Enemy>>();
             EnemiesInGame = new List<Enemy>();
 
             EnemySummonData[] Enemies = Resources.LoadAll<EnemySummonData>("Enemies");
-            //Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
+            Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
 
             foreach (EnemySummonData enemyData in Enemies)
             {
                 EnemyPrefabs.Add(enemyData.EnemyID, enemyData.EnemyPrefab);
-                EnemyObjectPools.Add(enemyData.EnemyID, new Queue<Enemy>());
             }
 
             IsInitialized = true;
-        }
-        else
-        {
-            //Debug.LogWarning("EntitySummoner is already initialized.");
         }
     }
 
     public static Enemy SummonEnemy(int EnemyID)
     {
-        Enemy SummonedEnemy = null;
-
-        if (EnemyPrefabs.ContainsKey(EnemyID))
+        if (!EnemyPrefabs.ContainsKey(EnemyID))
         {
-            Queue<Enemy> ReferencedQueue = EnemyObjectPools[EnemyID];
-
-            if (ReferencedQueue.Count > 0)
-            {
-                //Dequeue existing enemy from the pool
-                SummonedEnemy = ReferencedQueue.Dequeue();
-                SummonedEnemy.Init();
-
-                SummonedEnemy.gameObject.SetActive(true);
-                //Debug.Log("Reusing enemy from pool with ID: " + EnemyID);
-            }
-            else
-            {
-                GameObject enemyPrefab = Instantiate(EnemyPrefabs[EnemyID], spawnPoint.position, Quaternion.identity);
-                SummonedEnemy = enemyPrefab.GetComponent<Enemy>();
-                SummonedEnemy.Init();
-                //Debug.Log("Instantiated new enemy with ID: " + EnemyID);
-            }
-
-            SummonedEnemy.ID = EnemyID;
-            SummonedEnemy.Init();
-            EnemiesInGame.Add(SummonedEnemy);
-        }
-        else
-        {
-            //("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
+            Debug.LogError("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
             return null;
         }
 
-        EnemiesInGame.Add(SummonedEnemy);
-        SummonedEnemy.ID = EnemyID;
-        return SummonedEnemy;
+        // Always create a new enemy - no pooling
+        GameObject enemyObject = Instantiate(EnemyPrefabs[EnemyID], spawnPoint.position, Quaternion.identity);
+        Enemy newEnemy = enemyObject.GetComponent<Enemy>();
+        
+        if (newEnemy != null)
+        {
+            newEnemy.ID = EnemyID;
+            newEnemy.Init();
+            EnemiesInGame.Add(newEnemy);
+            
+            Debug.Log($"🆕 Spawned new enemy with ID: {EnemyID} at {spawnPoint.position}");
+        }
+        else
+        {
+            Debug.LogError($"Enemy prefab with ID {EnemyID} doesn't have an Enemy component!");
+            Destroy(enemyObject);
+        }
+
+        return newEnemy;
     }
 
     public static void RemoveEnemy(Enemy EnemyToRemove)
     {
-        EnemyObjectPools[EnemyToRemove.ID].Enqueue(EnemyToRemove);
-        EnemyToRemove.gameObject.SetActive(false);
-        EnemiesInGame.Remove(EnemyToRemove);
+        if (EnemyToRemove == null) return;
+
+        // Remove from tracking list
+        if (EnemiesInGame.Contains(EnemyToRemove))
+        {
+            EnemiesInGame.Remove(EnemyToRemove);
+        }
+
+        // Simply destroy the enemy - no pooling
+        Debug.Log($"🗑️ Destroying enemy: {EnemyToRemove.name}");
+        Destroy(EnemyToRemove.gameObject);
     }
 }

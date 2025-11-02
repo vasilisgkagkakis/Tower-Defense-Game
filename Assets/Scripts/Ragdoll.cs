@@ -45,6 +45,28 @@ public class Ragdoll : MonoBehaviour
             item.isTrigger = false;
         }
         navMeshAgent.enabled = false;
+
+        // Auto-cleanup ragdoll after 3 seconds
+        StartCoroutine(DestroyRagdollAfterDelay(3f));
+    }
+    
+    private IEnumerator DestroyRagdollAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        Debug.Log($"🗑️ Cleaning up ragdoll: {gameObject.name}");
+        
+        // Remove from EntitySummoner tracking and destroy
+        Enemy enemyScript = GetComponent<Enemy>();
+        if (enemyScript != null)
+        {
+            EntitySummoner.RemoveEnemy(enemyScript);
+        }
+        else
+        {
+            // Fallback: just destroy
+            Destroy(gameObject);
+        }
     }
     //Η αναδρομική συνάρτηση που αλλάζει όλα τα layers του ζόμπι σε ragdoll ώστε να μην υπάρχουν πια colliders με τον παίχτη όταν πεθάνει
     void SetAllChildLayers(Transform parentTransform, string layerName)
