@@ -27,7 +27,7 @@ namespace HomingMissile
         public bool velocity = true;
 
         [Header("Smart Targeting")]
-        public float retargetRange = 15f; // Range to look for new targets
+        public float retargetRange = 20f; // Range to look for new targets
         private float retargetCheckInterval = 0.25f; // Check every 0.25 seconds
         private float retargetTimer = 0f;
         

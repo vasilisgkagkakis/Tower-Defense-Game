@@ -91,7 +91,7 @@ public class TurretAim : MonoBehaviour
             // Check if target is still valid before each shot
             if (target == null)
             {
-                Debug.Log("🚫 Target became null during firing sequence - stopping barrage");
+                // Debug.Log("Target became null during firing sequence - stopping barrage");
                 yield break;
             }
 

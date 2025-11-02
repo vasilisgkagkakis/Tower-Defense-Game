@@ -54,7 +54,7 @@ public class Ragdoll : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         
-        Debug.Log($"🗑️ Cleaning up ragdoll: {gameObject.name}");
+        // Debug.Log($"Cleaning up ragdoll: {gameObject.name}");
         
         // Remove from EntitySummoner tracking and destroy
         Enemy enemyScript = GetComponent<Enemy>();

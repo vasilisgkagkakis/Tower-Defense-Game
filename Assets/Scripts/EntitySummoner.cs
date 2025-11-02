@@ -55,7 +55,7 @@ public class EntitySummoner : MonoBehaviour
             newEnemy.Init();
             EnemiesInGame.Add(newEnemy);
             
-            Debug.Log($"🆕 Spawned new enemy with ID: {EnemyID} at {spawnPoint.position}");
+            // Debug.Log($"Spawned new enemy with ID: {EnemyID} at {spawnPoint.position}");
         }
         else
         {
@@ -77,7 +77,7 @@ public class EntitySummoner : MonoBehaviour
         }
 
         // Simply destroy the enemy - no pooling
-        Debug.Log($"🗑️ Destroying enemy: {EnemyToRemove.name}");
+        Debug.Log($"Destroying enemy: {EnemyToRemove.name}");
         Destroy(EnemyToRemove.gameObject);
     }
 }

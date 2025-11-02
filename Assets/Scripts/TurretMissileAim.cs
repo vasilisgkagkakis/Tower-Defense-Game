@@ -5,7 +5,7 @@ public class TurretMissileAim : MonoBehaviour
 {
     public Transform turretMount;            // Rotating part of the turret
     public float turnSpeed = 5f;
-    public float detectionRange = 15f;
+    public float detectionRange = 20f;
     public float yRotationOffset = 0f;   
     public float zRotationOffset = 0f;     
     private Transform target;
@@ -82,7 +82,7 @@ public class TurretMissileAim : MonoBehaviour
         // Double-check target is still valid (enemy could have died between Update and this call)
         if (target.gameObject == null || !target.gameObject.activeInHierarchy)
         {
-            Debug.Log("🚫 Target became invalid before missile launch");
+            // Debug.Log("Target became invalid before missile launch");
             return;
         }
         
@@ -117,7 +117,7 @@ public class TurretMissileAim : MonoBehaviour
             // Activate missile
             missileScript.usemissile();
             
-            Debug.Log($"🚀 Missile launched at {target.name} with {towerBehaviour.currentDamage} damage (targeting: {towerBehaviour.targetType})");
+            // Debug.Log($"Missile launched at {target.name} with {towerBehaviour.currentDamage} damage (targeting: {towerBehaviour.targetType})");
         }
     }
 }
