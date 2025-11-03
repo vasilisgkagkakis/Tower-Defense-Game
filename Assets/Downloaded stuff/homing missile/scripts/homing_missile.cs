@@ -133,12 +133,12 @@ namespace HomingMissile
                             pointerScript.target = newTarget;
                         }
                     }
-                    Debug.Log($"🎯 Missile retargeted to {newTarget.name}");
+                    Debug.Log($"Missile retargeted to {newTarget.name}");
                 }
                 else
                 {
                     // No targets available - explode
-                    Debug.Log("💥 No targets available - missile exploding");
+                    Debug.Log("No targets available - missile exploding");
                     Explode();
                 }
             }

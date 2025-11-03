@@ -879,7 +879,6 @@ MonoBehaviour:
   - {fileID: 6281489304299448737}
   bulletPrefab: {fileID: 2100843152729171084, guid: df78893d758854e45ae7cbae4b0a2723, type: 3}
   bulletTrail: {fileID: 120648884187509030, guid: bfc369bff94296747a4a087a745b9176, type: 3}
-  fireInterval: 2
 --- !u!114 &9185334468565711010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,8 +924,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.611264, y: 7.0159245, z: 7.196962}
-  m_Center: {x: 0.03436724, y: 3.5380926, z: 1.0834415}
+  m_Size: {x: 6.611264, y: 7.0159245, z: 5.5296674}
+  m_Center: {x: 0.03436724, y: 3.5380926, z: 0.24979164}
 --- !u!1 &9014082271611759061
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,12 +18,14 @@ public class WaveManager : MonoBehaviour
 
     [Header("Enemy Spawning")]
     public Transform[] spawnPoints;
-    public float baseSpawnDelay = 1f;
+    public float baseSpawnDelay = 1.5f; // Increased from 1f for more breathing room
+    public float spawnDelayVariation = 2f; // Random variation in spawn timing
+    public float minSpawnDelay = 0.8f; // Minimum time between spawns
 
     [Header("Wave Progression")]
-    public float difficultyMultiplier = 1.2f; // Health/count multiplier per wave
-    public int enemiesPerWave = 50; // Base enemies per wave
-    public float bossHealthMultiplier = 3f; // Boss has 3x regular enemy health
+    public float difficultyMultiplier = 1.1f; // Health/count multiplier per wave
+    public int enemiesPerWave = 5; // Base enemies per wav
+    public float bossHealthMultiplier = 2f; // Boss has 2x regular enemy health
 
     [Header("UI References")]
     public Button startWaveButton;
@@ -147,8 +149,11 @@ public class WaveManager : MonoBehaviour
 
             SpawnEnemy(enemyID, waveHealth);
 
-            // Variable spawn delay - faster spawning in later waves
-            float spawnDelay = baseSpawnDelay * Mathf.Max(0.3f, 1f - (currentWave * 0.05f));
+            // Random spawn delay with variation - gives player more breathing room
+            float waveSpeedMultiplier = Mathf.Max(0.6f, 1f - (currentWave * 0.03f)); // Slower reduction per wave
+            float randomVariation = Random.Range(-spawnDelayVariation, spawnDelayVariation);
+            float spawnDelay = Mathf.Max(minSpawnDelay, (baseSpawnDelay + randomVariation) * waveSpeedMultiplier);
+            
             yield return new WaitForSeconds(spawnDelay);
         }
     }
@@ -168,10 +173,13 @@ public class WaveManager : MonoBehaviour
             int enemyID = regularEnemyTypes[Random.Range(0, regularEnemyTypes.Length)];
             float baseHealth = GetBaseEnemyHealth(enemyID);
             SpawnEnemy(enemyID, baseHealth * healthMultiplier);
-            yield return new WaitForSeconds(0.5f);
+            
+            // Random delay between regular enemies in boss wave
+            float randomDelay = Random.Range(0.8f, 1.5f);
+            yield return new WaitForSeconds(randomDelay);
         }
 
-        yield return new WaitForSeconds(2f); // Pause before boss
+        yield return new WaitForSeconds(3f); // Longer pause before boss (increased from 2f)
 
         // Spawn the boss (ID 4)
         float bossHealth = GetBaseEnemyHealth(4) * healthMultiplier * bossHealthMultiplier;
@@ -223,8 +231,8 @@ public class WaveManager : MonoBehaviour
         switch (enemyID)
         {
             case 1: return 50f;  // Regular enemy 1
-            case 2: return 60f;  // Regular enemy 2  
-            case 3: return 70f;  // Regular enemy 3
+            case 2: return 55f;  // Regular enemy 2  
+            case 3: return 60f;  // Regular enemy 3
             case 4: return 300f; // Boss enemy
             default: return 50f;
         }

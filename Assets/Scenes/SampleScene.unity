@@ -11052,7 +11052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bf1294d7f13ac4d87fe2e4aec7ff37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentCurrency: 150
+  currentCurrency: 200
   currencyText: {fileID: 2137711549}
 --- !u!114 &1667895132
 MonoBehaviour:
@@ -11066,7 +11066,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6082ef3e0b9eb8f41b1b39b1017174fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLives: 3
+  currentLives: 10
   livesText: {fileID: 695918965}
 --- !u!114 &1667895133
 MonoBehaviour:
@@ -11087,10 +11087,12 @@ MonoBehaviour:
   gameStarted: 0
   spawnPoints:
   - {fileID: 1424187794302711117, guid: ec70c80f49b4f9e41ade1296ce1018da, type: 3}
-  baseSpawnDelay: 1
-  difficultyMultiplier: 1.2
+  baseSpawnDelay: 1.5
+  spawnDelayVariation: 2
+  minSpawnDelay: 0.8
+  difficultyMultiplier: 1.1
   enemiesPerWave: 5
-  bossHealthMultiplier: 3
+  bossHealthMultiplier: 2
   startWaveButton: {fileID: 1455485770}
   waveInfoText: {fileID: 184462698}
   enemiesRemainingText: {fileID: 531767347}
@@ -14215,9 +14217,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 705507995}
   - {fileID: 1976502520}
-  - {fileID: 1667895127}
   - {fileID: 554946832}
   - {fileID: 56450962}
   - {fileID: 1776000298}
   - {fileID: 844589129}
   - {fileID: 290460977}
+  - {fileID: 1667895127}
