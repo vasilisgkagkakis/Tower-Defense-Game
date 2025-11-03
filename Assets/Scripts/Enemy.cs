@@ -46,17 +46,15 @@ public class Enemy : MonoBehaviour
         if (CurrencyManager.Instance != null && WaveManager.Instance != null)
         {
             // Scale kill reward with wave progression
-            int baseKillReward = 5;
+            int baseKillReward = 3;
             int currentWave = WaveManager.Instance.GetCurrentWave();
             
-            // Formula: 5 + (wave * 2) - gives reasonable scaling
-            // Wave 1: 7, Wave 5: 15, Wave 10: 25, Wave 20: 45
-            int reward = baseKillReward + (currentWave * 2);
+            int reward = baseKillReward + (currentWave * 1);
             
             // Boss enemies (ID 4) give extra reward
             if (ID == 4)
             {
-                reward *= 3; // Boss gives 3x normal kill reward
+                reward *= 2; // Boss gives 2x normal kill reward
             }
             
             CurrencyManager.Instance.AddCurrency(reward);
