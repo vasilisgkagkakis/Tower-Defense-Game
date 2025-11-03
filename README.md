@@ -2,6 +2,22 @@
 
 A comprehensive 3D tower defense game built with Unity, featuring procedural wave generation, strategic turret placement, and immersive sci-fi environments.
 
+## Screenshots
+
+### Main Menu
+![Main Menu](Assets/Screenshots/MainMenuScreenshot.png)
+
+### Gameplay
+![Gameplay Screenshot](Assets/Screenshots/GamePlay1Screenshot.png)
+
+![Gameplay Screenshot 2](Assets/Screenshots/GamePlay2Screenshot.png)
+
+### Pause Menu
+![Pause Menu](Assets/Screenshots/PausedMenuScreenshot.png)
+
+### Instructions
+![Instructions UI](Assets/Screenshots/InstructionsScreenshot.png)
+
 ## Overview
 
 NOVA Line Tower Defense is a sophisticated tower defense game that challenges players to defend their base against waves of increasingly powerful enemies. The game combines strategic resource management, tactical turret placement, and real-time combat mechanics in a polished sci-fi setting.
