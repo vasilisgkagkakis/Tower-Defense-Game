@@ -3,46 +3,44 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    
+
     [Header("Audio Sources")]
     public AudioSource backgroundMusicSource;
     public AudioSource soundEffectsSource;
-    
+
     [Header("Missile Audio")]
-    private AudioSource missileThrustSource;  // Created dynamically for missile thrust
-    
+    private AudioSource missileThrustSource;
+
     [Header("Audio Clips")]
     public AudioClip[] backgroundMusicTracks;
-    
+
     [Header("Missile Sound Effects")]
     public AudioClip missileLaunch;    // Used for missile launch (one-shot)
     public AudioClip missileThrust;    // Used for ongoing thrust (looping)
     public AudioClip explosionSound;  // Used when missiles explode
-    
+
     [Header("Turret Sound Effects")]
     public AudioClip turret1Shoot;    // Turret 1 shooting sound
     public AudioClip turret3Shoot;    // Turret 3 shooting sound
-    
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
-    
+
     void Start()
     {
         PlayBackgroundMusic();
         CreateMissileThrustSource();
-        
-        // Register our audio sources with the GlobalAudioController MANUALLY
-        // This prevents auto-registration from causing conflicts
+
+        // Register our audio sources with the GlobalAudioController
         if (GlobalAudioController.Instance != null)
         {
             if (backgroundMusicSource != null)
@@ -59,8 +57,8 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
-    
-    
+
+
     public void PlayBackgroundMusic(int trackIndex = 0)
     {
         if (backgroundMusicSource != null && backgroundMusicTracks != null && trackIndex < backgroundMusicTracks.Length)
@@ -70,7 +68,7 @@ public class AudioManager : MonoBehaviour
             backgroundMusicSource.Play();
         }
     }
-    
+
     public void PlaySoundEffect(AudioClip clip)
     {
         if (soundEffectsSource != null)
@@ -89,21 +87,20 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
-    
+
     private void CreateMissileThrustSource()
     {
         if (missileThrustSource == null)
         {
-            // Create a dedicated AudioSource for missile thrust
             missileThrustSource = gameObject.AddComponent<AudioSource>();
             missileThrustSource.playOnAwake = false;
             missileThrustSource.loop = true;
         }
     }
-    
+
     // Missile sound methods - all controlled by sliders via GlobalAudioController
     public void PlayMissileLaunch() => PlaySoundEffect(missileLaunch);
-    
+
     public void StartMissileThrust()
     {
         if (missileThrustSource != null && missileThrust != null && !missileThrustSource.isPlaying)
@@ -112,7 +109,7 @@ public class AudioManager : MonoBehaviour
             missileThrustSource.Play();
         }
     }
-    
+
     public void StopMissileThrust()
     {
         if (missileThrustSource != null && missileThrustSource.isPlaying)
@@ -120,10 +117,8 @@ public class AudioManager : MonoBehaviour
             missileThrustSource.Stop();
         }
     }
-    
+
     public void PlayExplosion() => PlaySoundEffect(explosionSound);
-    
-    // Turret sound methods - all controlled by sliders via GlobalAudioController
     public void PlayTurret1Shoot() => PlaySoundEffect(turret1Shoot);
     public void PlayTurret3Shoot() => PlaySoundEffect(turret3Shoot);
 }

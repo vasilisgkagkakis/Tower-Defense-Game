@@ -10,6 +10,7 @@ public class LifeManager : MonoBehaviour
 
     void Awake()
     {
+        UpdateLivesUI();
         if (Instance == null)
         {
             Instance = this;
@@ -20,35 +21,20 @@ public class LifeManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        UpdateLivesUI();
-    }
-
-    public int GetLives()
-    {
-        return currentLives;
-    }
-    
-    public int GetCurrentLives()
-    {
-        return currentLives;
-    }
-
     public bool LoseLife()
     {
         currentLives--;
         UpdateLivesUI();
-        
-        Debug.Log($"Life lost! Remaining lives: {currentLives}");
-        
+
+        // Debug.Log($"Life lost! Remaining lives: {currentLives}");
+
         if (currentLives <= 0)
         {
-            Debug.Log("Game Over! No lives remaining!");
+            // Debug.Log("Game Over! No lives remaining!");
             OnGameOver();
             return true; // Game over
         }
-        
+
         return false; // Game continues
     }
 
@@ -62,15 +48,15 @@ public class LifeManager : MonoBehaviour
 
     private void OnGameOver()
     {
-        Debug.Log("🎮 GAME OVER - No lives remaining!");
-        
+        // Debug.Log("🎮 GAME OVER - No lives remaining!");
+
         // Get current wave number
         int currentWave = 1; // Default fallback
         if (WaveManager.Instance != null)
         {
             currentWave = WaveManager.Instance.GetCurrentWave();
         }
-        
+
         // Show game over UI
         if (GameOverManager.Instance != null)
         {

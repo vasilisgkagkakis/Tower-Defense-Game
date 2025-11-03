@@ -16,11 +16,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Don't process any input if game is over
-        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
-        {
-            return;
-        }
-        
+        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver()) return;
+
         // Handle player movement input
         PlayerMovementInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         PlayerMouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -35,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         float currentSpeed = Speed;
         if (Input.GetKey(KeyCode.LeftShift))
             currentSpeed = 10f; // Boosted speed
-        // else keep currentSpeed as Speed (your normal speed)
+        // else keep currentSpeed as Speed (normal speed)
 
         Vector3 MoveVector = transform.TransformDirection(PlayerMovementInput);
 
@@ -58,19 +55,19 @@ public class PlayerMovement : MonoBehaviour
     {
         // Don't rotate camera if game is paused or game over
         bool canRotateCamera = true;
-        
+
         // Check if game is paused
         if (PauseMenuManager.Instance != null && PauseMenuManager.Instance.IsGamePaused())
         {
             canRotateCamera = false;
         }
-        
+
         // Check if game is over
         if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
         {
             canRotateCamera = false;
         }
-        
+
         if (Input.GetMouseButton(1) && canRotateCamera)
         {
             xRot -= PlayerMouseInput.y * Sensitivity;

@@ -8,13 +8,13 @@ public class EndZoneTrigger : MonoBehaviour
         // Ensure this object has a collider set as trigger
         if (!TryGetComponent<Collider>(out var col))
         {
-            Debug.LogError("EndZoneTrigger: No collider found! Please add a collider component.");
+            // Debug.LogError("EndZoneTrigger: No collider found! Please add a collider component.");
             return;
         }
 
         if (!col.isTrigger)
         {
-            Debug.LogWarning("EndZoneTrigger: Collider is not set as trigger. Setting isTrigger = true.");
+            // Debug.LogWarning("EndZoneTrigger: Collider is not set as trigger. Setting isTrigger = true.");
             col.isTrigger = true;
         }
     }
@@ -36,12 +36,7 @@ public class EndZoneTrigger : MonoBehaviour
                     // Lose a life
                     if (LifeManager.Instance != null)
                     {
-                        bool gameOver = LifeManager.Instance.LoseLife();
-
-                        if (gameOver)
-                        {
-                            // Debug.Log("Game Over triggered by enemy reaching end zone!");
-                        }
+                        LifeManager.Instance.LoseLife();
                     }
                     else
                     {

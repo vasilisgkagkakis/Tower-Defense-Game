@@ -8,8 +8,8 @@ public class WaveManager : MonoBehaviour
     public static WaveManager Instance;
 
     [Header("Wave Configuration")]
-    public WaveData[] predefinedWaves; // For manually designed waves
-    public bool useProceduralWaves = true; // Generate waves algorithmically
+    public WaveData[] predefinedWaves;
+    public bool useProceduralWaves = true;
 
     [Header("Wave State")]
     public int currentWave = 0;
@@ -18,14 +18,14 @@ public class WaveManager : MonoBehaviour
 
     [Header("Enemy Spawning")]
     public Transform[] spawnPoints;
-    public float baseSpawnDelay = 1.5f; // Increased from 1f for more breathing room
-    public float spawnDelayVariation = 2f; // Random variation in spawn timing
-    public float minSpawnDelay = 0.8f; // Minimum time between spawns
+    public float baseSpawnDelay = 1.5f;
+    public float spawnDelayVariation = 2f;
+    public float minSpawnDelay = 0.8f;
 
     [Header("Wave Progression")]
-    public float difficultyMultiplier = 1.1f; // Health/count multiplier per wave
-    public int enemiesPerWave = 5; // Base enemies per wav
-    public float bossHealthMultiplier = 2f; // Boss has 2x regular enemy health
+    public float difficultyMultiplier = 1.1f;
+    public int enemiesPerWave = 5;
+    public float bossHealthMultiplier = 2f;
 
     [Header("UI References")]
     public Button startWaveButton;
@@ -36,7 +36,6 @@ public class WaveManager : MonoBehaviour
     public int baseWaveReward = 50;
     public int bossWaveReward = 200;
 
-    // Private variables
     private int enemiesRemaining = 0;
     private bool waitingForWaveStart = true;
 
@@ -65,14 +64,14 @@ public class WaveManager : MonoBehaviour
     {
         if (waveInProgress || waitingForWaveStart)
         {
-            UpdateButtonUI(); // Update button state as needed
+            UpdateButtonUI();
         }
     }
 
     public void StartNextWave()
     {
         if (waveInProgress || !waitingForWaveStart) return;
-        
+
         // Don't start wave if game is paused
         if (PauseMenuManager.Instance != null && PauseMenuManager.Instance.IsGamePaused()) return;
 
@@ -83,8 +82,6 @@ public class WaveManager : MonoBehaviour
 
         if (startWaveButton != null)
             startWaveButton.interactable = false;
-        
-    
 
         StartCoroutine(SpawnWave());
     }
@@ -105,7 +102,6 @@ public class WaveManager : MonoBehaviour
         }
         else
         {
-            // Fallback to procedural if we run out of predefined waves
             yield return StartCoroutine(SpawnProceduralWave(isBossWave));
         }
 
@@ -132,15 +128,12 @@ public class WaveManager : MonoBehaviour
         // Calculate wave difficulty
         int totalEnemies = Mathf.RoundToInt(enemiesPerWave + (currentWave * 0.75f)); // More enemies each wave
         float healthMultiplier = Mathf.Pow(difficultyMultiplier, currentWave - 1);
-
-        // Mix of enemy types (IDs 1, 2, 3 for regular enemies)
         int[] enemyTypes = { 1, 2, 3 };
 
-        Debug.Log($"Starting Wave {currentWave}: {totalEnemies} enemies, {healthMultiplier:F1}x health");
+        // Debug.Log($"Starting Wave {currentWave}: {totalEnemies} enemies, {healthMultiplier:F1}x health");
 
         for (int i = 0; i < totalEnemies; i++)
         {
-            // Random enemy type (1, 2, or 3)
             int enemyID = enemyTypes[Random.Range(0, enemyTypes.Length)];
 
             // Each enemy type gets consistent health based on their type + wave multiplier
@@ -149,48 +142,45 @@ public class WaveManager : MonoBehaviour
 
             SpawnEnemy(enemyID, waveHealth);
 
-            // Random spawn delay with variation - gives player more breathing room
-            float waveSpeedMultiplier = Mathf.Max(0.6f, 1f - (currentWave * 0.03f)); // Slower reduction per wave
+            float waveSpeedMultiplier = Mathf.Max(0.6f, 1f - (currentWave * 0.03f));
             float randomVariation = Random.Range(-spawnDelayVariation, spawnDelayVariation);
             float spawnDelay = Mathf.Max(minSpawnDelay, (baseSpawnDelay + randomVariation) * waveSpeedMultiplier);
-            
+
             yield return new WaitForSeconds(spawnDelay);
         }
     }
 
     IEnumerator SpawnBossWave()
     {
-        Debug.Log($"Starting Boss Wave {currentWave}!");
+        // Debug.Log($"Starting Boss Wave {currentWave}!");
 
-        // Spawn a few regular enemies first
         int regularEnemies = Mathf.Max(3, currentWave / 2);
         float healthMultiplier = Mathf.Pow(difficultyMultiplier, currentWave - 1);
 
         for (int i = 0; i < regularEnemies; i++)
         {
-            // Only spawn regular enemies (1, 2, 3) - not boss (4)
             int[] regularEnemyTypes = { 1, 2, 3 };
             int enemyID = regularEnemyTypes[Random.Range(0, regularEnemyTypes.Length)];
             float baseHealth = GetBaseEnemyHealth(enemyID);
             SpawnEnemy(enemyID, baseHealth * healthMultiplier);
-            
+
             // Random delay between regular enemies in boss wave
             float randomDelay = Random.Range(0.8f, 1.5f);
             yield return new WaitForSeconds(randomDelay);
         }
 
-        yield return new WaitForSeconds(3f); // Longer pause before boss (increased from 2f)
+        yield return new WaitForSeconds(3f);
 
         // Spawn the boss (ID 4)
         float bossHealth = GetBaseEnemyHealth(4) * healthMultiplier * bossHealthMultiplier;
         SpawnEnemy(4, bossHealth);
 
-        Debug.Log($"Boss spawned with {bossHealth} health!");
+        // Debug.Log($"Boss spawned with {bossHealth} health!");
     }
 
     IEnumerator SpawnPredefinedWave(WaveData waveData)
     {
-        Debug.Log($"Starting predefined wave: {waveData.waveName}");
+        // Debug.Log($"Starting predefined wave: {waveData.waveName}");
 
         foreach (EnemySpawnData enemyGroup in waveData.enemies)
         {
@@ -243,10 +233,7 @@ public class WaveManager : MonoBehaviour
         enemiesRemaining--;
         UpdateEnemiesRemainingUI();
 
-        if (enemiesRemaining <= 0 && waveInProgress)
-        {
-            // Wave completed - this will be handled by the coroutine
-        }
+
     }
 
     public void OnEnemyReachedEnd()
@@ -262,7 +249,7 @@ public class WaveManager : MonoBehaviour
 
         // Give wave completion reward
         int reward = wasBossWave ? bossWaveReward : baseWaveReward;
-        reward += currentWave * 10; // Bonus based on wave number
+        reward += currentWave * 10;
 
         if (CurrencyManager.Instance != null)
         {
@@ -270,7 +257,6 @@ public class WaveManager : MonoBehaviour
         }
 
         Debug.Log($"Wave {currentWave} completed! Reward: {reward} currency");
-
         UpdateAllUI();
     }
 
@@ -312,12 +298,9 @@ public class WaveManager : MonoBehaviour
     {
         if (startWaveButton != null)
         {
-            bool nextIsBossWave = ((currentWave + 1) % 5 == 0);
+            bool nextIsBossWave = (currentWave + 1) % 5 == 0;
 
-            // Update button interactability
             startWaveButton.interactable = !waveInProgress && waitingForWaveStart;
-
-            // Update button text
             TextMeshProUGUI buttonText = startWaveButton.GetComponentInChildren<TextMeshProUGUI>();
             if (buttonText != null)
             {
@@ -346,11 +329,6 @@ public class WaveManager : MonoBehaviour
             }
             startWaveButton.colors = colors;
         }
-    }
-
-    public bool IsWaveInProgress()
-    {
-        return waveInProgress;
     }
 
     public int GetCurrentWave()

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace HomingMissile
@@ -7,19 +5,6 @@ namespace HomingMissile
     public class homing_missile_pointer : MonoBehaviour
     {
         public GameObject target;
-        private Vector3 aimPoint;
-
-        void Awake()
-        {
-            if (target != null)
-            {
-                Transform aimTransform = target.transform.Find("AimPoint");
-                if (aimTransform != null)
-                    aimPoint = aimTransform.position;
-                else
-                    aimPoint = target.transform.position;
-            }
-        }
 
         private Vector3 previousTargetPosition;
         private Vector3 targetVelocity;
@@ -38,7 +23,6 @@ namespace HomingMissile
                 else
                     currentTargetPosition = target.transform.position;
 
-                // Calculate target velocity
                 if (hasVelocityData)
                 {
                     targetVelocity = (currentTargetPosition - previousTargetPosition) / Time.fixedDeltaTime;
@@ -60,13 +44,12 @@ namespace HomingMissile
 
         private Vector3 CalculatePredictiveAimPoint(Vector3 currentTargetPosition)
         {
-            // Get missile reference to check its speed
             var missile = GetComponentInParent<homing_missile>();
             if (missile == null) return currentTargetPosition;
 
             float missileSpeed = missile.speed;
             if (missileSpeed <= 0 || targetVelocity.magnitude < 0.1f) 
-                return currentTargetPosition; // No prediction for stationary targets
+                return currentTargetPosition;
 
             // Use interception calculation for better accuracy
             Vector3 predictedPosition = CalculateInterceptionPoint(
@@ -76,13 +59,8 @@ namespace HomingMissile
                 targetVelocity
             );
 
-            // Use missile's prediction strength setting
             float predictionStrength = missile.predictionStrength;
             Vector3 finalAimPoint = Vector3.Lerp(currentTargetPosition, predictedPosition, predictionStrength);
-            
-            // Debug visualization
-            Debug.DrawLine(currentTargetPosition, predictedPosition, Color.red, 0.1f);
-            Debug.DrawLine(transform.position, finalAimPoint, Color.yellow, 0.1f);
             
             return finalAimPoint;
         }
@@ -120,25 +98,5 @@ namespace HomingMissile
             return targetPos + targetVel * t;
         }
 
-        private void OnDrawGizmosSelected()
-        {
-            if (target != null)
-            {
-                // Draw target's current position
-                Gizmos.color = Color.blue;
-                Gizmos.DrawWireCube(target.transform.position, Vector3.one * 0.5f);
-                
-                // Draw predicted position
-                Vector3 currentPos = target.transform.position;
-                Vector3 predictedPos = CalculatePredictiveAimPoint(currentPos);
-                
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(predictedPos, Vector3.one * 0.3f);
-                
-                // Draw prediction line
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(transform.position, predictedPos);
-            }
-        }
     }
 }

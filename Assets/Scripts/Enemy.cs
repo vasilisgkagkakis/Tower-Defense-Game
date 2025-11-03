@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
 
         if (Health <= 0)
         {
-            GetComponent<Ragdoll>().EnableRagdoll(transform.position);
+            GetComponent<Ragdoll>().EnableRagdoll();
             GetComponent<NavMeshAgent>().enabled = false;
         }
     }

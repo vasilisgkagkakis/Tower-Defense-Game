@@ -16,7 +16,7 @@ public class TowerBehaviour : MonoBehaviour
     [Header("Economy")]
     public int totalInvestment = 0; // Track total money invested
 
-    public bool isPlaced = false; // Set this to true when the tower is placed
+    public bool isPlaced = false; // Is the tower placed in the world?
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class TowerBehaviour : MonoBehaviour
     {
         if (!isPlaced)
         {
-            Debug.Log("Cannot upgrade: Tower is not placed.");
+            Debug.LogWarning("Cannot upgrade: Tower is not placed.");
             return;
         }
 
@@ -47,7 +47,7 @@ public class TowerBehaviour : MonoBehaviour
 
             if (CurrencyManager.Instance == null || !CurrencyManager.Instance.SpendCurrency(upgradeCost))
             {
-                Debug.Log("Not enough currency to upgrade!");
+                Debug.LogWarning("Not enough currency to upgrade!");
                 return;
             }
 
@@ -60,10 +60,10 @@ public class TowerBehaviour : MonoBehaviour
             newBehaviour.SetHighlight();
 
             // Copy over targeting mode and investment (but reset upgrade level for new prefab)
-            newBehaviour.targetType = this.targetType;
+            newBehaviour.targetType = targetType;
             newBehaviour.upgradeLevel = 0; // Reset to 0 because each prefab starts fresh
-            newBehaviour.actualUpgradeLevel = this.actualUpgradeLevel + 1; // Track the real progression level
-            newBehaviour.totalInvestment = this.totalInvestment + upgradeCost;
+            newBehaviour.actualUpgradeLevel = actualUpgradeLevel + 1; // Track the real progression level
+            newBehaviour.totalInvestment = totalInvestment + upgradeCost;
 
             // Set new damage if you want to override TowerData
             if (upgradeDamages.Length > upgradeLevel)

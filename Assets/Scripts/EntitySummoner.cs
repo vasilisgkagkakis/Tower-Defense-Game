@@ -8,9 +8,9 @@ public class EntitySummoner : MonoBehaviour
     public static Dictionary<int, GameObject> EnemyPrefabs;
 
     [SerializeField]
-    private Transform spawnPointInstance; // Assign in Inspector
+    private Transform spawnPointInstance;
 
-    public static Transform spawnPoint; // Static reference for static methods
+    public static Transform spawnPoint;
 
     private static bool IsInitialized;
 
@@ -24,7 +24,7 @@ public class EntitySummoner : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         spawnPoint = spawnPointInstance;
     }
 
@@ -52,33 +52,6 @@ public class EntitySummoner : MonoBehaviour
         }
     }
 
-    public static Enemy SummonEnemy(int EnemyID)
-    {
-        if (!EnemyPrefabs.ContainsKey(EnemyID))
-        {
-            Debug.LogError("Enemy ID " + EnemyID + " not found in EnemyPrefabs.");
-            return null;
-        }
-
-        GameObject enemyObject = Instantiate(EnemyPrefabs[EnemyID], spawnPoint.position, Quaternion.identity);
-        Enemy newEnemy = enemyObject.GetComponent<Enemy>();
-        
-        if (newEnemy != null)
-        {
-            newEnemy.ID = EnemyID;
-            EnemiesInGame.Add(newEnemy);
-            
-            // Debug.Log($"Spawned new enemy with ID: {EnemyID} at {spawnPoint.position}");
-        }
-        else
-        {
-            Debug.LogError($"Enemy prefab with ID {EnemyID} doesn't have an Enemy component!");
-            Destroy(enemyObject);
-        }
-
-        return newEnemy;
-    }
-
     // Instance method for WaveManager to use with custom spawn position
     public GameObject SummonEnemy(int EnemyID, Vector3 spawnPosition)
     {
@@ -88,15 +61,14 @@ public class EntitySummoner : MonoBehaviour
             return null;
         }
 
-        // Always create a new enemy - no pooling
+        // Create a new enemy
         GameObject enemyObject = Instantiate(EnemyPrefabs[EnemyID], spawnPosition, Quaternion.identity);
-        Enemy newEnemy = enemyObject.GetComponent<Enemy>();
         
-        if (newEnemy != null)
+        if (enemyObject.TryGetComponent<Enemy>(out var newEnemy))
         {
             newEnemy.ID = EnemyID;
             EnemiesInGame.Add(newEnemy);
-            
+
             // Debug.Log($"Spawned new enemy with ID: {EnemyID} at {spawnPosition}");
         }
         else

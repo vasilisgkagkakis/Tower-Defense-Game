@@ -28,11 +28,11 @@ namespace HomingMissile
         public float retargetRange = 20f; // Range to look for new targets
         private float retargetCheckInterval = 0.25f; // Check every 0.25 seconds
         private float retargetTimer = 0f;
-        
+
         [Header("Predictive Targeting")]
         [Range(0f, 1f)]
         public float predictionStrength = 0.7f; // How much to lead the target (0 = no prediction, 1 = full prediction)
-        
+
         [Header("Turret Integration")]
         [HideInInspector]
         public TowerBehaviour originatingTurret; // Reference to the turret that fired this missile
@@ -40,10 +40,8 @@ namespace HomingMissile
         private void Start()
         {
             projectilerb = GetComponent<Rigidbody>();
-            
-            // All audio is now handled centrally by AudioManager - no registration needed
         }
-        
+
         void OnDestroy()
         {
             // Ensure thrust sound stops when missile is destroyed
@@ -55,12 +53,11 @@ namespace HomingMissile
 
         public void usemissile()
         {
-            // Play launch sound through centralized AudioManager (controlled by slider)
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlayMissileLaunch();
             }
-            
+
             isactive = true;
         }
 
@@ -75,13 +72,12 @@ namespace HomingMissile
 
         private void Explode()
         {
-            // Stop thrust sound and play explosion sound through AudioManager
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.StopMissileThrust();
                 AudioManager.Instance.PlayExplosion();
             }
-            
+
             if (explosionEffect != null)
             {
                 if (explosionEffect.Length > 0 && explosionEffect[0] != null)
@@ -133,12 +129,12 @@ namespace HomingMissile
                             pointerScript.target = newTarget;
                         }
                     }
-                    Debug.Log($"Missile retargeted to {newTarget.name}");
+                    // Debug.Log($"Missile retargeted to {newTarget.name}");
                 }
                 else
                 {
                     // No targets available - explode
-                    Debug.Log("No targets available - missile exploding");
+                    // Debug.Log("No targets available - missile exploding");
                     Explode();
                 }
             }
@@ -163,10 +159,9 @@ namespace HomingMissile
             {
                 // Try to get the turret's detection range (missiles should use a larger range for retargeting)
                 float turretRange = float.MaxValue; // Default to no range limit
-                
+
                 // Check if the turret has a TurretAim or TurretMissileAim component for range
-                var turretAim = originatingTurret.GetComponent<TurretAim>();
-                if (turretAim != null)
+                if (originatingTurret.TryGetComponent<TurretAim>(out var turretAim))
                 {
                     turretRange = turretAim.detectionRange * 2f; // Missiles get double range for retargeting
                 }
@@ -175,20 +170,20 @@ namespace HomingMissile
                     var missileAim = originatingTurret.GetComponent<TurretMissileAim>();
                     if (missileAim != null)
                     {
-                        turretRange = missileAim.detectionRange * 2f; // Missiles get double range for retargeting
+                        turretRange = missileAim.detectionRange * 2f;
                     }
                 }
-                
+
                 Enemy enemyTarget = TowerTargeting.GetTarget(originatingTurret, originatingTurret.targetType, turretRange);
                 if (enemyTarget != null)
                 {
-                    Debug.Log($"🎯 Missile using turret targeting logic ({originatingTurret.targetType}) with range {turretRange}: {enemyTarget.name}");
+                    // Debug.Log($"Missile using turret targeting logic ({originatingTurret.targetType}) with range {turretRange}: {enemyTarget.name}");
                     return enemyTarget.gameObject;
                 }
             }
 
             // Fallback to closest enemy if no turret reference
-            Debug.Log("🎯 Missile fallback to closest targeting (no turret reference)");
+            // Debug.Log("Missile fallback to closest targeting (no turret reference)");
             return FindClosestLivingEnemy();
         }
 
@@ -214,16 +209,6 @@ namespace HomingMissile
             }
 
             return closest;
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, explosionRadius);
-
-            // Draw retarget range
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, retargetRange);
         }
 
         [System.Obsolete]

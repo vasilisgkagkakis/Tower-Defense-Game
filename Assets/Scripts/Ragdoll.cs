@@ -9,7 +9,7 @@ public class Ragdoll : MonoBehaviour
     Animator animator;
     NavMeshAgent navMeshAgent;
 
-    //παιρνω οτι χρειαζομαι για αργοτερα
+    // Initial setup
     private void Awake()
     {
         ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
@@ -17,11 +17,9 @@ public class Ragdoll : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         DisableRagdoll();
-        //enable ragdoll after 3 seconds for testing purposes
-        // StartCoroutine(EnableRagdollDelayed(transform.position, 3f));
     }
 
-    //για καθε rigidbody που εχει, τα κανω kinematic ωστε να μην χρησιμοποιουν την βαρυτητα ακομα
+    // make rigidbodies kinematic and enable animator
     public void DisableRagdoll()
     {
         foreach (var rigidbody in ragdollRigidbodies)
@@ -31,8 +29,8 @@ public class Ragdoll : MonoBehaviour
         }
     }
 
-    //κανω ολα τα rigidbody να χρησιμοποιουν την βαρυτητα ωστε να "πεσουν" σαν ragdoll
-    public void EnableRagdoll(Vector3 hitpoint)
+    // make rigidbodies non-kinematic to enable ragdoll physics
+    public void EnableRagdoll()
     {
         animator.enabled = false;
         SetAllChildLayers(transform, "RagdollEnemy");
@@ -49,11 +47,11 @@ public class Ragdoll : MonoBehaviour
         // Auto-cleanup ragdoll after 3 seconds
         StartCoroutine(DestroyRagdollAfterDelay(3f));
     }
-    
+
     private IEnumerator DestroyRagdollAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        
+
         // Remove from EntitySummoner tracking and destroy
         Enemy enemyScript = GetComponent<Enemy>();
         if (enemyScript != null)
@@ -62,12 +60,13 @@ public class Ragdoll : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Enemy script not found on ragdoll: {gameObject.name}");
+            Debug.LogError($"Enemy script not found on ragdoll: {gameObject.name}");
             // Fallback: just destroy
             Destroy(gameObject);
         }
     }
-    //Η αναδρομική συνάρτηση που αλλάζει όλα τα layers του ζόμπι σε ragdoll ώστε να μην υπάρχουν πια colliders με τον παίχτη όταν πεθάνει
+
+    // Recursive function that changes all layers of the zombie to ragdoll so that there are no more colliders with the player when it dies
     void SetAllChildLayers(Transform parentTransform, string layerName)
     {
         parentTransform.gameObject.layer = LayerMask.NameToLayer(layerName);

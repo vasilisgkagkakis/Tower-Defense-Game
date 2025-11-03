@@ -17,7 +17,7 @@ public class TowerPlacement : MonoBehaviour
     [SerializeField] private Button button1;
     [SerializeField] private Button button2;
     [SerializeField] private Button button3;
-    
+
     [Header("Tower Costs")]
     [SerializeField] private int tower1Cost = 100;
     [SerializeField] private int tower2Cost = 400;
@@ -56,13 +56,13 @@ public class TowerPlacement : MonoBehaviour
     {
         Button btn = null;
         int cost = 0;
-        
+
         if (Keyboard.current.digit1Key.wasPressedThisFrame) { btn = button1; cost = tower1Cost; }
         else if (Keyboard.current.digit2Key.wasPressedThisFrame) { btn = button2; cost = tower2Cost; }
         else if (Keyboard.current.digit3Key.wasPressedThisFrame) { btn = button3; cost = tower3Cost; }
 
         if (btn == null) return;
-        
+
         // Check if player can afford the tower
         if (CurrencyManager.Instance == null || !CanAffordTower(cost))
         {
@@ -133,14 +133,14 @@ public class TowerPlacement : MonoBehaviour
         if (!canPlace) return;
 
         var behaviour = CurrentPlacingTower.GetComponent<TowerBehaviour>();
-        
+
         // Deduct cost when placing tower
         if (CurrencyManager.Instance != null && !CurrencyManager.Instance.SpendCurrency(behaviour.towerData.baseCost))
         {
             Debug.Log("Not enough currency to place tower!");
             return;
         }
-        
+
         behaviour.isPlaced = true;
         towerCollider.isTrigger = false;
 
@@ -189,6 +189,7 @@ public class TowerPlacement : MonoBehaviour
         button3.GetComponent<Image>().raycastTarget = enable;
     }
 
+    // Used by tower buttons onClick events
     public void SetTowerToPlace(GameObject towerPrefab)
     {
         float yOffset = towerPrefab.name == "turret_2" ? 0.12f : 0f;
@@ -212,22 +213,22 @@ public class TowerPlacement : MonoBehaviour
             r.SetPropertyBlock(block);
         }
     }
-    
+
     private void UpdateButtonAffordability()
     {
         if (isPlacingTower) return; // Don't update when placing towers
-        
+
         if (CurrencyManager.Instance != null)
         {
             int currentCurrency = CurrencyManager.Instance.GetCurrency();
-            
+
             // Update button interactability based on affordability
             if (button1 != null) button1.interactable = CanAffordTower(tower1Cost);
             if (button2 != null) button2.interactable = CanAffordTower(tower2Cost);
             if (button3 != null) button3.interactable = CanAffordTower(tower3Cost);
         }
     }
-    
+
     private bool CanAffordTower(int cost)
     {
         return CurrencyManager.Instance != null && CurrencyManager.Instance.GetCurrency() >= cost;

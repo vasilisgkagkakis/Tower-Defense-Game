@@ -22,17 +22,17 @@ public class TurretAim : MonoBehaviour
     void Awake()
     {
         towerBehaviour = GetComponent<TowerBehaviour>();
-        
+
         // Set fire interval from tower data
         if (towerBehaviour != null && towerBehaviour.towerData != null)
         {
             fireInterval = towerBehaviour.towerData.fireInterval;
         }
-        
+
         // Calculate delay between barrels
         barrelDelay = StartPoint.Length > 0 ? fireInterval / StartPoint.Length : 1f;
 
-        
+
         // Initialize so turret can fire immediately when placed
         lastShotTime = -999f;
         currentBarrel = 0;
@@ -54,28 +54,17 @@ public class TurretAim : MonoBehaviour
             Vector3 direction = target.position - turretMount.position;
             direction.y = 0f; // Only rotate around Y
 
-            bool isAimedAtTarget = false;
-            
             if (direction.sqrMagnitude > 0.01f)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 Quaternion adjustedRotation = lookRotation * Quaternion.Euler(0, yRotationOffset, zRotationOffset);
                 turretMount.rotation = Quaternion.Slerp(turretMount.rotation, adjustedRotation, Time.deltaTime * turnSpeed);
-                
-                // Check if rotation is close enough to target rotation (within 15 degrees)
-                float angleDifference = Quaternion.Angle(turretMount.rotation, adjustedRotation);
-                isAimedAtTarget = angleDifference < 15f;
-            }
-            else
-            {
-                isAimedAtTarget = true; // Very close, consider aimed
             }
 
             // Fire timing - only when tower is placed (don't require perfect aim for hitscan)
             float timeSinceLastShot = Time.time - lastShotTime;
-            
 
-            
+
             // Check if it's time to fire next barrel
             if (timeSinceLastShot >= barrelDelay)
             {
@@ -184,10 +173,8 @@ public class TurretAim : MonoBehaviour
 
             // The bullet prefab is just visual decoration that falls to ground
             // Damage is applied instantly via LineRenderer in ApplyInstantDamage()
-
             // Give a small forward force (along -Z)
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (bullet.TryGetComponent<Rigidbody>(out var rb))
             {
                 rb.AddForce(-bullet.transform.forward, ForceMode.Impulse);
             }
@@ -195,16 +182,16 @@ public class TurretAim : MonoBehaviour
             Destroy(bullet, 2f);
         }
     }
-    
+
     private void PlayTurretShootSound()
     {
         if (AudioManager.Instance == null) return;
-        
+
         // Identify turret type by TowerData name or GameObject name
         if (towerBehaviour != null && towerBehaviour.towerData != null)
         {
             string turretName = towerBehaviour.towerData.turretName.ToLower();
-            
+
             if (turretName.Contains("basic"))
             {
                 AudioManager.Instance.PlayTurret1Shoot();

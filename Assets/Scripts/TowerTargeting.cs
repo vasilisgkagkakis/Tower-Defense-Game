@@ -26,11 +26,11 @@ public class TowerTargeting
                 {
                     Enemy enemy = obj.GetComponent<Enemy>();
                     if (enemy == null || enemy.Health <= 0) continue; // Skip dead enemies
-                    
+
                     // Check if enemy is within detection range
                     float distanceToTower = Vector3.Distance(towerPos, enemy.transform.position);
                     if (distanceToTower > detectionRange) continue; // Skip enemies out of range
-                    
+
                     if (enemy.DistanceTravelled > maxDistance)
                     {
                         maxDistance = enemy.DistanceTravelled;
@@ -45,11 +45,11 @@ public class TowerTargeting
                 {
                     if (!obj.TryGetComponent<Enemy>(out var enemy)) continue;
                     if (enemy.Health <= 0) continue; // Skip dead enemies
-                    
+
                     // Check if enemy is within detection range
                     float distanceToTower = Vector3.Distance(towerPos, enemy.transform.position);
                     if (distanceToTower > detectionRange) continue; // Skip enemies out of range
-                    
+
                     if (enemy.DistanceTravelled < minDistance)
                     {
                         minDistance = enemy.DistanceTravelled;
@@ -64,10 +64,10 @@ public class TowerTargeting
                 {
                     Enemy enemy = obj.GetComponent<Enemy>();
                     if (enemy == null || enemy.Health <= 0) continue; // Skip dead enemies
-                    
+
                     float dist = Vector3.Distance(towerPos, enemy.transform.position);
                     if (dist > detectionRange) continue; // Skip enemies out of range
-                    
+
                     if (dist < closest)
                     {
                         closest = dist;
