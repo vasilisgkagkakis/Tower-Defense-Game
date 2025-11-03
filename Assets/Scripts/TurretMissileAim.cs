@@ -27,6 +27,9 @@ public class TurretMissileAim : MonoBehaviour
         {
             fireInterval = towerBehaviour.towerData.fireInterval;
         }
+        
+        // Initialize fireTimer to fireInterval so turret can fire immediately when placed
+        fireTimer = fireInterval;
     }
 
     void Update()

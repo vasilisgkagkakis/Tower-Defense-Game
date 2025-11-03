@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 20
   isAreaDamage: 0
-  fireInterval: 2
+  fireInterval: 1
   baseCost: 600
   upgradeCosts: 20030000dc050000b80b0000
   turretName: Advanced Turret

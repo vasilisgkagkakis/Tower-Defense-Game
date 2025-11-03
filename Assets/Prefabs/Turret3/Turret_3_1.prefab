@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turretMount: {fileID: 6632783597599884468}
   turnSpeed: 10
-  detectionRange: 1000
+  detectionRange: 15
   yRotationOffset: -90
   zRotationOffset: 0
   StartPoint:
