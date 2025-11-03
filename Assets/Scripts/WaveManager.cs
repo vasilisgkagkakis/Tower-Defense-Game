@@ -23,9 +23,9 @@ public class WaveManager : MonoBehaviour
     public float minSpawnDelay = 0.8f;
 
     [Header("Wave Progression")]
-    public float difficultyMultiplier = 1.1f;
+    public float difficultyMultiplier = 1.2f;
     public int enemiesPerWave = 5;
-    public float bossHealthMultiplier = 2f;
+    public float bossHealthMultiplier = 2.5f;
 
     [Header("UI References")]
     public Button startWaveButton;
@@ -33,8 +33,8 @@ public class WaveManager : MonoBehaviour
     public TextMeshProUGUI enemiesRemainingText;
 
     [Header("Rewards")]
-    public int baseWaveReward = 50;
-    public int bossWaveReward = 200;
+    public int baseWaveReward = 40;
+    public int bossWaveReward = 150;
 
     private int enemiesRemaining = 0;
     private bool waitingForWaveStart = true;
@@ -165,7 +165,7 @@ public class WaveManager : MonoBehaviour
             SpawnEnemy(enemyID, baseHealth * healthMultiplier);
 
             // Random delay between regular enemies in boss wave
-            float randomDelay = Random.Range(0.8f, 1.5f);
+            float randomDelay = Random.Range(0.5f, 1.0f);
             yield return new WaitForSeconds(randomDelay);
         }
 
@@ -202,8 +202,7 @@ public class WaveManager : MonoBehaviour
 
             if (enemy != null)
             {
-                Enemy enemyScript = enemy.GetComponent<Enemy>();
-                if (enemyScript != null)
+                if (enemy.TryGetComponent<Enemy>(out var enemyScript))
                 {
                     enemyScript.Health = health;
                     enemyScript.ID = enemyID;
@@ -221,9 +220,9 @@ public class WaveManager : MonoBehaviour
         switch (enemyID)
         {
             case 1: return 50f;  // Regular enemy 1
-            case 2: return 55f;  // Regular enemy 2  
-            case 3: return 60f;  // Regular enemy 3
-            case 4: return 300f; // Boss enemy
+            case 2: return 60f;  // Regular enemy 2  
+            case 3: return 70f;  // Regular enemy 3
+            case 4: return 350f; // Boss enemy
             default: return 50f;
         }
     }
@@ -249,7 +248,7 @@ public class WaveManager : MonoBehaviour
 
         // Give wave completion reward
         int reward = wasBossWave ? bossWaveReward : baseWaveReward;
-        reward += currentWave * 10;
+        reward += currentWave * 5;
 
         if (CurrencyManager.Instance != null)
         {
@@ -273,13 +272,13 @@ public class WaveManager : MonoBehaviour
         {
             if (waitingForWaveStart)
             {
-                bool nextIsBoss = ((currentWave + 1) % 5 == 0);
+                bool nextIsBoss = (currentWave + 1) % 5 == 0;
                 string waveType = nextIsBoss ? "BOSS WAVE" : "Wave";
                 waveInfoText.text = $"Ready for {waveType} {currentWave + 1}";
             }
             else
             {
-                bool isBoss = (currentWave % 5 == 0);
+                bool isBoss = currentWave % 5 == 0;
                 string waveType = isBoss ? "BOSS WAVE" : "Wave";
                 waveInfoText.text = $"{waveType} {currentWave} in progress";
             }
