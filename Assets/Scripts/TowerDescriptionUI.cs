@@ -86,6 +86,27 @@ public class TowerDescriptionUI : MonoBehaviour
         DescriptionUI.SetActive(false);
     }
 
+    public bool IsUIActive()
+    {
+        return DescriptionUI != null && DescriptionUI.activeInHierarchy;
+    }
+
+    public void RefreshUpgradeButton()
+    {
+        if (currentTower == null || upgradeButton == null) return;
+
+        bool canUpgrade = currentTower.upgradeLevel < currentTower.upgradePrefabs.Length;
+        bool hasEnoughCurrency = true;
+
+        if (canUpgrade && CurrencyManager.Instance != null)
+        {
+            int upgradeCost = currentTower.towerData.upgradeCosts[currentTower.actualUpgradeLevel];
+            hasEnoughCurrency = CurrencyManager.Instance.GetCurrency() >= upgradeCost;
+        }
+
+        upgradeButton.interactable = canUpgrade && hasEnoughCurrency;
+    }
+
     private void OnTargetingChanged(int value)
     {
         if (currentTower != null)

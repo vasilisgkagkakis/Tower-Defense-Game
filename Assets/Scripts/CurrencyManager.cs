@@ -36,6 +36,7 @@ public class CurrencyManager : MonoBehaviour
         {
             currentCurrency -= amount;
             UpdateCurrencyUI();
+            RefreshUpgradeButton();
             return true;
         }
         return false;
@@ -45,6 +46,7 @@ public class CurrencyManager : MonoBehaviour
     {
         currentCurrency += amount;
         UpdateCurrencyUI();
+        RefreshUpgradeButton();
     }
 
     private void UpdateCurrencyUI()
@@ -52,6 +54,14 @@ public class CurrencyManager : MonoBehaviour
         if (currencyText != null)
         {
             currencyText.text = currentCurrency.ToString();
+        }
+    }
+
+    private void RefreshUpgradeButton()
+    {
+        if (TowerDescriptionUI.Instance != null && TowerDescriptionUI.Instance.IsUIActive())
+        {
+            TowerDescriptionUI.Instance.RefreshUpgradeButton();
         }
     }
 }
