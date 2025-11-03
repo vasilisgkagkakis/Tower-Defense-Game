@@ -59,6 +59,12 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // Don't allow pause/unpause if game is over
+            if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
+            {
+                return; // Block pause functionality during game over
+            }
+            
             if (isPaused)
             {
                 // If instructions GameObject is active, go back to pause GameObject
@@ -143,6 +149,13 @@ Don't let them reach the end zone!";
     
     public void PauseGame()
     {
+        // Don't allow pausing if game is over
+        if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
+        {
+            Debug.Log("Cannot pause - game is over");
+            return;
+        }
+        
         isPaused = true;
         originalTimeScale = Time.timeScale;
         Time.timeScale = 0f;

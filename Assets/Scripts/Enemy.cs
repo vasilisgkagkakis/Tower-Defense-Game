@@ -31,9 +31,7 @@ public class Enemy : MonoBehaviour
     {
         if (Health <= 0) return; // Already dead
 
-        Debug.Log($"Enemy  Health: {Health}");
         Health -= damage;
-        Debug.Log($"Enemy {name} took {damage} damage. Health: {Health}");
 
         if (Health <= 0)
         {

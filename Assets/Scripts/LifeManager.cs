@@ -13,7 +13,6 @@ public class LifeManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -63,13 +62,23 @@ public class LifeManager : MonoBehaviour
 
     private void OnGameOver()
     {
-        // You can expand this to show game over screen, pause game, etc.
-        Debug.Log("🎮 GAME OVER - Implement game over logic here!");
+        Debug.Log("🎮 GAME OVER - No lives remaining!");
         
-        // Example: Pause the game
-        // Time.timeScale = 0f;
+        // Get current wave number
+        int currentWave = 1; // Default fallback
+        if (WaveManager.Instance != null)
+        {
+            currentWave = WaveManager.Instance.GetCurrentWave();
+        }
         
-        // Example: Load game over scene
-        // SceneManager.LoadScene("GameOverScene");
+        // Show game over UI
+        if (GameOverManager.Instance != null)
+        {
+            GameOverManager.Instance.ShowGameOver(currentWave);
+        }
+        else
+        {
+            Debug.LogError("GameOverManager.Instance is null! Make sure GameOverManager is in the scene.");
+        }
     }
 }

@@ -14,8 +14,10 @@ public class TurretAim : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] LineRenderer bulletTrail;
 
-    private float fireTimer;
     private float fireInterval = 1f; // Will be set from TowerData
+    private float lastShotTime = -999f; // Track when last barrel fired
+    private int currentBarrel = 0; // Which barrel to fire next (0-3 for 4 barrels)
+    private float barrelDelay; // Time between each barrel shot
 
     void Awake()
     {
@@ -27,8 +29,13 @@ public class TurretAim : MonoBehaviour
             fireInterval = towerBehaviour.towerData.fireInterval;
         }
         
-        // Initialize fireTimer to fireInterval so turret can fire immediately when placed
-        fireTimer = fireInterval;
+        // Calculate delay between barrels
+        barrelDelay = StartPoint.Length > 0 ? fireInterval / StartPoint.Length : 1f;
+
+        
+        // Initialize so turret can fire immediately when placed
+        lastShotTime = -999f;
+        currentBarrel = 0;
     }
 
     void Update()
@@ -47,24 +54,45 @@ public class TurretAim : MonoBehaviour
             Vector3 direction = target.position - turretMount.position;
             direction.y = 0f; // Only rotate around Y
 
+            bool isAimedAtTarget = false;
+            
             if (direction.sqrMagnitude > 0.01f)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 Quaternion adjustedRotation = lookRotation * Quaternion.Euler(0, yRotationOffset, zRotationOffset);
                 turretMount.rotation = Quaternion.Slerp(turretMount.rotation, adjustedRotation, Time.deltaTime * turnSpeed);
+                
+                // Check if rotation is close enough to target rotation (within 15 degrees)
+                float angleDifference = Quaternion.Angle(turretMount.rotation, adjustedRotation);
+                isAimedAtTarget = angleDifference < 15f;
+            }
+            else
+            {
+                isAimedAtTarget = true; // Very close, consider aimed
             }
 
-            // Fire timer - only when tower is placed
-            fireTimer += Time.deltaTime;
-            if (fireTimer >= fireInterval)
+            // Fire timing - only when tower is placed (don't require perfect aim for hitscan)
+            float timeSinceLastShot = Time.time - lastShotTime;
+            
+
+            
+            // Check if it's time to fire next barrel
+            if (timeSinceLastShot >= barrelDelay)
             {
-                SpawnBulletTrail();
-                fireTimer = 0f;
+                // Update lastShotTime IMMEDIATELY to prevent multiple fires this frame
+                lastShotTime = Time.time;
+                FireSingleBarrel();
             }
         }
         else
         {
-            fireTimer = fireInterval; // Ready to fire immediately when a target appears
+            // When no target, only reset after a longer period to avoid breaking sequences
+            if (lastShotTime > 0 && Time.time - lastShotTime > barrelDelay * 3)
+            {
+                currentBarrel = 0;
+                lastShotTime = -999f;
+                // Debug.Log($"[{Time.time:F2}] No target for >3 barrel delays, resetting sequence for immediate fire");
+            }
         }
     }
 
@@ -83,61 +111,46 @@ public class TurretAim : MonoBehaviour
             target = null;
     }
 
-    private void SpawnBulletTrail()
+    private void FireSingleBarrel()
     {
-        if (target == null) return;
-        StartCoroutine(FireAllBarrels());
-    }
+        if (target == null || StartPoint.Length == 0) return;
 
-    private System.Collections.IEnumerator FireAllBarrels()
-    {
-        int count = StartPoint.Length;
-        if (count == 0) yield break;
-        float delay = fireInterval / count;
+        // Get the current barrel to fire
+        var sp = StartPoint[currentBarrel];
+        if (sp == null) return;
 
-        for (int i = 0; i < count; i++)
+        Vector3 start = sp.position;
+        Vector3 end;
+
+        // Safely try to find AimPoint
+        Transform aimPoint = target.Find("AimPoint");
+        if (aimPoint != null)
         {
-            // Check if target is still valid before each shot
-            if (target == null)
-            {
-                // Debug.Log("Target became null during firing sequence - stopping barrage");
-                yield break;
-            }
-
-            var sp = StartPoint[i];
-            if (sp == null) continue;
-
-            Vector3 start = sp.position;
-            Vector3 end;
-
-            // Safely try to find AimPoint
-            Transform aimPoint = target.Find("AimPoint");
-            if (aimPoint != null)
-            {
-                end = aimPoint.position;
-            }
-            else
-            {
-                end = target.position;
-            }
-
-            GameObject bulletTrailEffect = Instantiate(bulletTrail.gameObject, start, Quaternion.identity);
-            LineRenderer lineR = bulletTrailEffect.GetComponent<LineRenderer>();
-            lineR.SetPosition(0, start);
-            lineR.SetPosition(1, end);
-            Destroy(bulletTrailEffect, 1f);
-
-            // Play turret shooting sound based on turret type
-            PlayTurretShootSound();
-
-            // Apply damage instantly (hitscan style)
-            ApplyInstantDamage(target);
-
-            FireBulletFromPoint(sp, end);
-
-            if (i < count - 1)
-                yield return new WaitForSeconds(delay);
+            end = aimPoint.position;
         }
+        else
+        {
+            end = target.position;
+        }
+
+        // Create bullet trail effect
+        GameObject bulletTrailEffect = Instantiate(bulletTrail.gameObject, start, Quaternion.identity);
+        LineRenderer lineR = bulletTrailEffect.GetComponent<LineRenderer>();
+        lineR.SetPosition(0, start);
+        lineR.SetPosition(1, end);
+        Destroy(bulletTrailEffect, 1f);
+
+        // Play turret shooting sound
+        PlayTurretShootSound();
+
+        // Apply damage instantly (hitscan style)
+        ApplyInstantDamage(target);
+
+        // Fire bullet prefab
+        FireBulletFromPoint(sp, end);
+
+        // Update barrel index (lastShotTime already updated in caller)
+        currentBarrel = (currentBarrel + 1) % StartPoint.Length; // Cycle through barrels
     }
 
     private void ApplyInstantDamage(Transform target)

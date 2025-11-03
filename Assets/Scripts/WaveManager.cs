@@ -22,7 +22,7 @@ public class WaveManager : MonoBehaviour
 
     [Header("Wave Progression")]
     public float difficultyMultiplier = 1.2f; // Health/count multiplier per wave
-    public int enemiesPerWave = 5; // Base enemies per wave
+    public int enemiesPerWave = 50; // Base enemies per wave
     public float bossHealthMultiplier = 3f; // Boss has 3x regular enemy health
 
     [Header("UI References")]

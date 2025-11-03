@@ -223,14 +223,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turretMount: {fileID: 6632783597599884468}
   turnSpeed: 10
-  detectionRange: 15
+  detectionRange: 1000
   yRotationOffset: -90
   zRotationOffset: 0
   StartPoint:
   - {fileID: 2239196405033822671}
   bulletPrefab: {fileID: 2100843152729171084, guid: df78893d758854e45ae7cbae4b0a2723, type: 3}
   bulletTrail: {fileID: 120648884187509030, guid: bfc369bff94296747a4a087a745b9176, type: 3}
-  fireInterval: 2
 --- !u!114 &-2422296115511977876
 MonoBehaviour:
   m_ObjectHideFlags: 0

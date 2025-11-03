@@ -27,12 +27,6 @@ public class GlobalAudioController : MonoBehaviour
         }
     }
     
-    void Start()
-    {
-        // Don't auto-register - let scripts register their own audio sources manually
-        // This prevents conflicts and double registration
-        Debug.Log("🎧 GlobalAudioController ready - waiting for manual registrations");
-    }
     
     #region Registration System
     
@@ -48,7 +42,6 @@ public class GlobalAudioController : MonoBehaviour
             
             backgroundMusicSources.Add(audioSource);
             audioSource.volume = backgroundMusicVolume;
-            Debug.Log($"🎵 Registered background music: {audioSource.gameObject.name}");
         }
     }
     
@@ -64,7 +57,6 @@ public class GlobalAudioController : MonoBehaviour
             
             soundEffectSources.Add(audioSource);
             audioSource.volume = soundEffectsVolume;
-            Debug.Log($"🔊 Registered sound effect: {audioSource.gameObject.name}");
         }
     }
     
@@ -134,7 +126,6 @@ public class GlobalAudioController : MonoBehaviour
         
         // Save setting
         PlayerPrefs.SetFloat("BackgroundMusicVolume", backgroundMusicVolume);
-        Debug.Log($"🎵 Background music volume set to: {(backgroundMusicVolume * 100):F0}%");
     }
     
     /// <summary>
@@ -155,7 +146,6 @@ public class GlobalAudioController : MonoBehaviour
         
         // Save setting
         PlayerPrefs.SetFloat("SoundEffectsVolume", soundEffectsVolume);
-        Debug.Log($"🔊 Sound effects volume set to: {soundEffectsVolume * 100:F0}%");
     }
     
     /// <summary>

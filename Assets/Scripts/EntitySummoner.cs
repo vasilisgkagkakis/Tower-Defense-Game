@@ -41,7 +41,7 @@ public class EntitySummoner : MonoBehaviour
             EnemiesInGame = new List<Enemy>();
 
             EnemySummonData[] Enemies = Resources.LoadAll<EnemySummonData>("Enemies");
-            Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
+            // Debug.Log("Found " + Enemies.Length + " enemy prefabs in Resources/Enemies");
 
             foreach (EnemySummonData enemyData in Enemies)
             {
@@ -118,8 +118,6 @@ public class EntitySummoner : MonoBehaviour
             EnemiesInGame.Remove(EnemyToRemove);
         }
 
-        // Simply destroy the enemy - no pooling
-        Debug.Log($"Destroying enemy: {EnemyToRemove.name}");
         Destroy(EnemyToRemove.gameObject);
     }
 }
